@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e412cfd88ad1ac45a03a0d6a30251d5, type: 3}
+  m_Name: Gourd
+  m_EditorClassIdentifier: 
+  name: Gourd
+  physicalPrefab: {fileID: 3140274900163360029, guid: 10c015d1c568a124a895a75fa4295250,
+    type: 3}
+  type: 0
+  image: {fileID: 21300000, guid: 288d86f52cbedc9468dd1be13e03e289, type: 3}
+  healthRestoration: 0
+  hungerRestoration: 18
+  thirstRestoration: 8
