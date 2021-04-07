@@ -1,0 +1,15 @@
+1. Go to Assets/Scripts/Items and right click an empty space
+
+2. Click 'create', then 'inventory', then either 'food' or 'item'
+
+3. Name the new item instance.
+
+4. Make a new GameObject in the world with model you want and give it a collider.
+
+5. Set the layer to 'interactable' (top right corner next to gameobject name)
+
+6. Attach ItemPickupable script to the new GameObject.
+
+7. Drag the item instance into the Item field of ItemPickupable.
+
+8. Drag the GameObject into the Assets/Resources/Prefabs folder to make it a prefab.

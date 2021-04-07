@@ -9,11 +9,18 @@ public class PauseController : MonoBehaviour
     public static bool gameIsPaused;
     public static PlayerCharacterController playerCharacterController;
 
+    /// <summary>
+    /// Grabs the player at start to be able to disable player controls when paused.
+    /// </summary>
     void Awake()
     {
         playerCharacterController = FindObjectOfType<PlayerCharacterController>();
     }
 
+    /// <summary>
+    /// Clicking pause should always exit pause screen.
+    /// TODO: make this check for death screen as that cannot be exited.
+    /// </summary>
     void Update()
     {
         if (Input.GetButtonDown("Pause"))
@@ -26,12 +33,20 @@ public class PauseController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Switch between paused and unpaused.
+    /// </summary>
     public static void TogglePausing()
     {
         gameIsPaused = !gameIsPaused;
         StateChange(gameIsPaused);
     }
 
+    /// <summary>
+    /// Call this to force the game to either pause or unpause instead of toggle
+    /// </summary>
+    /// <param name="pauseState">The new pause state</param>
+    /// <param name="isInGui">If a GUI was opened for pausing</param>
     public static void ForcePauseState(bool pauseState, bool isInGui)
     {
         gameIsPaused = pauseState;
@@ -41,6 +56,11 @@ public class PauseController : MonoBehaviour
         if(inGui) Cursor.visible = true;
     }
 
+    /// <summary>
+    /// Handles pausing/unpausing the game in its entirety. (timeScale set to 0)
+    /// Should never be called outside this class.
+    /// </summary>
+    /// <param name="newState">The state to change the pause state to</param>
     private static void StateChange(bool newState)
     {
         // Pauses the game by making all time based stuff stop

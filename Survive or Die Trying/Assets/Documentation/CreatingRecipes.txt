@@ -1,0 +1,13 @@
+1. Click on GameCanvases and then CraftingCanvas in the Heirarchy view.
+
+2. Find Crafting Recipies script attached to CraftingCanvas.
+
+3. Crafting Recipies -> Size is the amount of recipes there are. Increment this to add a new recipe.
+
+4. Open Input Items on the new element and set the size to how many input items it will need.
+
+5. Go to Assets/Resources/Prefabs and drag the item prefabs into the slots for input items needed.
+
+6. Drag an item prefab to the output slot for what will be crafted when the input items match.
+
+7. Save and run the game to see if the crafting recipe took effect.

@@ -11,6 +11,11 @@ public class EntityHealth : MonoBehaviour
         protected set { currentHealth = Mathf.Clamp(value, 0, maxHealth); }
     }
 
+    /// <summary>
+    /// Call when harming the entity.
+    /// </summary>
+    /// <param name="heal">How much to damage. Must always be positive</param>
+    /// <param name="type">The kind of damaging that is occuring</param>
     public virtual void TakeDamage(float damage, DAMAGE_TYPE type)
     {
         // Must always be positive
@@ -18,6 +23,11 @@ public class EntityHealth : MonoBehaviour
         CurrentHealth -= damage;
     }
 
+    /// <summary>
+    /// Call when healing the entity.
+    /// </summary>
+    /// <param name="heal">How much to heal. Must always be positive</param>
+    /// <param name="type">The kind of healing that is occuring</param>
     public virtual void Heal(float heal, HEAL_TYPE type)
     {
         // Must always be positive
@@ -25,6 +35,9 @@ public class EntityHealth : MonoBehaviour
         CurrentHealth += heal;
     }
 
+    /// <summary>
+    /// Puts entity's health back to maximum
+    /// </summary>
     public void ResetHealth()
     {
         currentHealth = maxHealth;

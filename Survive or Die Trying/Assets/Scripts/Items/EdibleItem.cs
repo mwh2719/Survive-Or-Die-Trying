@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Will make this show up in the asset context menu so people can quickly make more food instances.
 [CreateAssetMenu(fileName = "New Food", menuName = "Inventory/Food")]
 public class EdibleItem : Item
 {
@@ -10,11 +11,21 @@ public class EdibleItem : Item
     public float hungerRestoration;
     public float thirstRestoration;
 
+    /// <summary>
+    /// Foods can always be eaten.
+    /// </summary>
+    /// <returns>Always true</returns>
     public override bool CanBeUsed()
     {
         return true;
     }
 
+    /// <summary>
+    /// Will consume the food and apply its effects to the eater.
+    /// This includes hunger, thirst, and/or health.
+    /// </summary>
+    /// <param name="user">The eater</param>
+    /// <returns>Whether the food was truly consumed</returns>
     public override bool Use(GameObject user)
     {
         // Checks if it is usable by entity

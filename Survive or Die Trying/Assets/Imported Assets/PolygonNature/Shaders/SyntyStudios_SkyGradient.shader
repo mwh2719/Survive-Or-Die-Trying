@@ -14,12 +14,15 @@ Shader "SyntyStudios/SkyGradient"
 
 	SubShader
 	{
-		Tags{ "RenderType" = "Opaque"  "Queue" = "Geometry+0" "IsEmissive" = "true"  }
+		Tags{ "RenderType" = "Opaque"  "Queue" = "Geometry+0" "IsEmissive" = "true" "NatureRendererInstancing" = "True" }
 		Cull Back
 		CGPROGRAM
 		#pragma target 3.0
 		#pragma instancing_options procedural:setup
 		#pragma multi_compile GPU_FRUSTUM_ON __
+		#pragma multi_compile_instancing
+		#pragma instancing_options procedural:SetupNatureRenderer
+		#include "Assets/Imported Assets/Visual Design Cafe/Nature Shaders/Common/Nodes/Integrations/Nature Renderer.cginc"
 		#include "VS_indirect.cginc"
 		#pragma surface surf Unlit keepalpha noshadow nofog 
 		struct Input

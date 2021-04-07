@@ -11,6 +11,9 @@ public class InventorySlot : MonoBehaviour
     public GameObject useButton;
     public string hotkeyToUse;
 
+    /// <summary>
+    /// What item that this inventory slot will hold and display
+    /// </summary>
     public void AddItem(Item newItem)
     {
         item = newItem;
@@ -18,6 +21,9 @@ public class InventorySlot : MonoBehaviour
         icon.enabled = true;
     }
 
+    /// <summary>
+    /// Remove item from slot and show nothing
+    /// </summary>
     public void ClearSlot()
     {
         item = null;
@@ -26,29 +32,45 @@ public class InventorySlot : MonoBehaviour
         ShowActions(false);
     }
     
-
+    /// <summary>
+    /// Show/hide the action buttons on this slot if the item is usable
+    /// </summary>
+    /// <param name="show">whether to show/hide the action buttons</param>
     public void ShowActions(bool show)
     {
-        if (show && item.CanBeUsed())
+        if(useButton != null)
         {
-            useButton.SetActive(!useButton.activeSelf);
-        }
-        else
-        {
-            useButton.SetActive(false);
+            if (show && item.CanBeUsed())
+            {
+                useButton.SetActive(!useButton.activeSelf);
+            }
+            else
+            {
+                useButton.SetActive(false);
+            }
         }
     }
 
+    /// <summary>
+    /// TODO: add dropping functionality
+    /// </summary>
     public void DropItem()
     {
 
     }
 
+    /// <summary>
+    /// Retrieve the item that this slot is holding. Null if no item.
+    /// </summary>
+    /// <returns>The item held</returns>
     public Item GetItem()
     {
         return item;
     }
 
+    /// <summary>
+    /// Consumes the item and calls the item's Use method.
+    /// </summary>
     public void UseItem()
     {
         if(item != null)

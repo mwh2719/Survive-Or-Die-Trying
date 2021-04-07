@@ -25,7 +25,7 @@ Shader "SyntyStudios/Water"
 
 	SubShader
 	{
-		Tags{ "RenderType" = "Transparent"  "Queue" = "Transparent+0" "IgnoreProjector" = "True" }
+		Tags{ "RenderType" = "Transparent"  "Queue" = "Transparent+0" "IgnoreProjector" = "True" "NatureRendererInstancing" = "True"}
 		Cull Back
 		CGPROGRAM
 		#include "UnityStandardUtils.cginc"
@@ -34,6 +34,9 @@ Shader "SyntyStudios/Water"
 		#pragma target 3.0
 		#pragma instancing_options procedural:setup
 		#pragma multi_compile GPU_FRUSTUM_ON __
+		#pragma multi_compile_instancing
+		#pragma instancing_options procedural:SetupNatureRenderer
+		#include "Assets/Imported Assets/Visual Design Cafe/Nature Shaders/Common/Nodes/Integrations/Nature Renderer.cginc"
 		#include "VS_indirect.cginc"
 		#pragma surface surf StandardSpecular alpha:fade keepalpha 
 		struct Input

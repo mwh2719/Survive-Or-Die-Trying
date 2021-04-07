@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -9,16 +10,24 @@ public class CraftingInput : MonoBehaviour
     List<InventorySlot> selectedSlots = new List<InventorySlot>();
     string currentRecipe = "";
     public GameObject craftOutputPanel;
-    public InventorySlot craftOuputSlot;
-
-    // Start is called before the first frame update
+    public InventorySlot craftOutputSlot;
+    PlayerInventory playerInventory;
+    
     void Start()
     {
+        playerInventory = PlayerInventory.instance;
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    /// <summary>
+    /// Call when slot is dragged into craft area to add it to the crafting list and show result recipe
+    /// </summary>
+    /// <param name="addedSlot"> Slot moved into craft area </param>
+    public void UpdateCraftItem(InventorySlot addedSlot)
     {
-        selectedSlots.Add(other.GetComponent<InventorySlot>());
+        if(addedSlot != null)
+        {
+            selectedSlots.Add(addedSlot);
+        }
 
         // Sort the slots by item name so order of dropping items into crafting doesn't matter
         selectedSlots.Sort((slot1, slot2) => string.Compare(
@@ -32,34 +41,41 @@ public class CraftingInput : MonoBehaviour
             .Aggregate((x, y) => x + y);
 
         // Gets resultant recipe and displays it.
-        string resultantRecipe = craftingRecipes[currentRecipe];
-        if (resultantRecipe != null)
+        if (CraftingRecipes.craftingRecipesDict.ContainsKey(currentRecipe))
         {
+            string resultantRecipe = CraftingRecipes.craftingRecipesDict[currentRecipe];
             craftOutputPanel.SetActive(true);
-            GameObject loadedPrefab = (GameObject)Instantiate(Resources.Load(resultantRecipe));
-            craftOuputSlot.AddItem(loadedPrefab.GetComponent<ItemPickupable>().item);
+            GameObject loadedPrefab = Instantiate(Resources.Load("Prefabs/"+resultantRecipe)) as GameObject;
+            craftOutputSlot.AddItem(loadedPrefab.GetComponent<ItemPickupable>().item);
+            Destroy(loadedPrefab); // remove the in-world instance of the gameobject. We only need the item instance from it.
         }
         else
         {
-            craftOuputSlot.ClearSlot();
+            craftOutputSlot.ClearSlot();
             craftOutputPanel.SetActive(false);
         }
-
-        Debug.Log("Triggered entered");
     }
 
-    void OnTriggerExit2D(Collider2D other)
+    /// <summary>
+    /// Call when slot is dragged outside craft area to remove it from the crafting list
+    /// </summary>
+    /// <param name="removedSlot"> Slot moved out of craft area </param>
+    public void RemoveCraftItem(InventorySlot removedSlot)
     {
-        selectedSlots.Remove(other.GetComponent<InventorySlot>());
-        Debug.Log("Triggered removed");
+        selectedSlots.Remove(removedSlot);
     }
 
-
-    ////////////////////////////////////////////////////
-    //Crafting dictionary
-    
-    public static Dictionary<string, string> craftingRecipes = new Dictionary<string, string>() {
-        { "ApplePear", "Corn" }
-    };
-
+    /// <summary>
+    /// For consuming all items in crafting area. 
+    /// They are all removed from inventory as well.
+    /// </summary>
+    public void DestroyAllInputItems()
+    {
+        selectedSlots.ForEach(delegate (InventorySlot slot)
+        {
+            playerInventory.Remove(slot.GetItem());
+            Destroy(slot.gameObject);
+        });
+        selectedSlots.Clear();
+    }
 }

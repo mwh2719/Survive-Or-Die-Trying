@@ -5,7 +5,6 @@ public class PlayerStats : MonoBehaviour
 {
     private PlayerCharacterController fpsController;
     private EntityHealth playerHealth;
-   // private Inventory inventory;
     private GameObject sun;
     [SerializeField]
     private LayerMask waterLayer;
@@ -33,8 +32,10 @@ public class PlayerStats : MonoBehaviour
         playerHealth = GetComponent<EntityHealth>();
         sun = GameObject.Find("Sun");
     }
-    
-    //Controls the changing of hunger/thirst/health for time-based mechanics.
+
+    /// <summary>
+    /// Controls the changing of hunger/thirst/health for time-based mechanics.
+    /// </summary>
     void Update()
     {
         if (PauseController.gameIsPaused) return; // Do not do anything if paused
@@ -74,32 +75,6 @@ public class PlayerStats : MonoBehaviour
         if (currentThirst == 0)
         {
             playerHealth.TakeDamage(0.001f, Categories.DAMAGE_TYPE.THIRST);
-        }
-
-
-        //Food test
-        //if (Input.GetKeyDown("c") && inventory.foodInv[0].CanBeUsed())
-        //{
-        //    inventory.UseFood(0, gameObject);
-        //}
-
-
-        //Environmental Drinking test
-        if (Input.GetKeyDown("v"))
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Camera.main.transform.forward);
-            if (Physics.Raycast(ray, out hit, waterLayer))
-            {
-                if (hit.collider && hit.distance < 0.5)
-                {
-                    GameObject obj = hit.collider.gameObject;
-                    DrinkableEnvironment drinkableScript = obj.GetComponent<DrinkableEnvironment>();
-                    if (drinkableScript)
-                    {
-                        drinkableScript.Drink(gameObject);
-                    }
-                }
-            }
         }
     }
 }

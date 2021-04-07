@@ -17,6 +17,7 @@ public class PlayerMainController : MonoBehaviour
     private Vector3 spawnPosition;
     private Interactable focus;
 
+
     [SerializeField] private float currentHunger;
     public float maxHunger;
     public float CurrentHunger
@@ -57,6 +58,12 @@ public class PlayerMainController : MonoBehaviour
     void Update()
     {
         if (PauseController.gameIsPaused) return; // Do not do anything if paused
+
+        if(playerHealth.CurrentHealth <= 0) 
+        {
+
+            return;
+        }
         
 
         /// hunger ///

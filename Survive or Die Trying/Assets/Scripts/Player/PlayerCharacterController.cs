@@ -27,6 +27,9 @@ public class PlayerCharacterController : MonoBehaviour
     [SerializeField] private AudioClip m_JumpSound;           // the sound played when character leaves the ground.
     [SerializeField] private AudioClip m_LandSound;           // the sound played when character touches back on ground.
 
+    [SerializeField] private float playerAttackRange;
+    [SerializeField] private float punchDamage;
+
     private Camera m_Camera;
     private bool m_Jump;
     private float m_YRotation;
@@ -51,6 +54,7 @@ public class PlayerCharacterController : MonoBehaviour
     // Use this for initialization
     private void Start()
     {
+        playerAnim.fireEvents = false;
         playerMainController = GetComponent<PlayerMainController>();
         m_CharacterController = GetComponent<CharacterController>();
         m_Camera = Camera.main;
@@ -81,6 +85,24 @@ public class PlayerCharacterController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+
+        m_Camera.transform.localPosition = new Vector3(m_Camera.transform.localPosition.x, m_Camera.transform.localPosition.y, .18f);//Fixing camera moving back inside player head
+
+        playerAnim.SetInteger("Health", (int)health.CurrentHealth);
+
+        if (Input.GetButtonDown("Action"))
+        {
+            //Add code here to see if the player is holding an item
+            if (0==1)
+            {
+
+            }
+            else
+            {
+                Punch();
+            }
+            
+        }
 
         RotateView();
         // the jump state needs to read here to make sure it is not missed
@@ -120,8 +142,6 @@ public class PlayerCharacterController : MonoBehaviour
 
     private void FixedUpdate()
     {
-
-        playerAnim.SetInteger("Health", (int) health.CurrentHealth);
 
         float speed;
         GetInput(out speed);
@@ -295,5 +315,21 @@ public class PlayerCharacterController : MonoBehaviour
             return;
         }
         body.AddForceAtPosition(m_CharacterController.velocity * 0.1f, hit.point, ForceMode.Impulse);
+    }
+
+    private void Punch()
+    {
+        playerAnim.SetTrigger("Punch");
+        RaycastHit hit;
+        AnimalBehavior animalHit;
+        if (Physics.Raycast(m_Camera.transform.position, m_Camera.transform.forward, out hit, playerAttackRange))
+        {
+            if (hit.transform.TryGetComponent<AnimalBehavior>(out animalHit))
+            {
+                animalHit.TakeDamage(punchDamage);
+            }
+        }
+
+
     }
 }

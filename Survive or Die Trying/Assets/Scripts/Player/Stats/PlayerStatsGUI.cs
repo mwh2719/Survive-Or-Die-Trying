@@ -9,8 +9,10 @@ public class PlayerStatsGUI : MonoBehaviour
     public Slider healthBar;
     public Slider thirstBar;
     public Slider hungerBar;
-
-    // Grab the player stats. This script and PlayerStats should be on the same object.
+    
+    /// <summary>
+    /// Grab the player stats. This script and PlayerStats should be on the same object.
+    /// </summary>
     void Start()
     {
         playerMainController = GetComponent<PlayerMainController>();
@@ -25,7 +27,7 @@ public class PlayerStatsGUI : MonoBehaviour
     }
 
     /// <summary>
-    /// Sets the bar value to the current stats each frame so the gauge will visibly decrease
+    /// Sets the bar value to the current stats each frame so the gauges will visibly decrease
     /// </summary>
     void UpdateGUI()
     {

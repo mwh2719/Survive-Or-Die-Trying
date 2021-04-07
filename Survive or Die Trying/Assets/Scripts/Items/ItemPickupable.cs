@@ -7,12 +7,18 @@ public class ItemPickupable : Interactable
 {
     public Item item;
 
+    /// <summary>
+    /// Call this when the player clicks to interact with the item.
+    /// </summary>
     public override void Interact()
     {
         base.Interact();
         PickUp();
     }
     
+    /// <summary>
+    /// Will remove the object from game-space and add the item to the player's inventory.
+    /// </summary>
     void PickUp()
     {
         Debug.Log("Picking up " + item.name);

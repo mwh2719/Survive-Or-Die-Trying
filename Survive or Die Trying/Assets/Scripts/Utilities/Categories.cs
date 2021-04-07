@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Used for categorizing certain effects or items in the game.
+/// </summary>
 public class Categories : MonoBehaviour
 {
     public enum DAMAGE_TYPE {

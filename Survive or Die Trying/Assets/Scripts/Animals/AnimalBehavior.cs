@@ -13,15 +13,19 @@ public class AnimalBehavior : MonoBehaviour
     public float animalReach;    //Variable to hold how far away the animal can attack
     private bool attacked = false;      //Variable to hold if the animal has already attacked during this attack animation state
 
+    private float health;     //Variable to hold the health of the animal
+    private ItemPickupable interactScript;  //Variable to hold reference to the script that makes the rabbit pickupable after death
     
 
     // Start is called before the first frame update
     void Start()
     {
-
+        interactScript = GetComponent<ItemPickupable>();
+        interactScript.enabled = false;
         //Setting the variables
         wanderScript = this.GetComponent<Animal_WanderScript>();
         animalStats = wanderScript.stats;
+        health = animalStats.toughness;
         animalAnimator = this.GetComponent<Animator>();
         player = GameObject.Find("Player");
 
@@ -69,5 +73,15 @@ public class AnimalBehavior : MonoBehaviour
             }
         }
         
+    }
+
+    public void TakeDamage(float dam)
+    {
+        health -= dam;
+        if(health <= 0)
+        {
+            wanderScript.Die();
+            interactScript.enabled = true;
+        }
     }
 }

@@ -108,8 +108,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c9209221d0a7714a80e7f2895907c52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lengthOfDay: 0.2
-  lengthOfNight: 0.2
+  lengthOfDay: 10
+  lengthOfNight: 7
   mapData: {fileID: 15600000, guid: be42bf09162d9d244895a3c41f000e62, type: 2}
   daySkybox: {fileID: 2100000, guid: 4cd12d68d12e1ae4c876390ea275e4e5, type: 2}
   nightSkybox: {fileID: 2100000, guid: d4454f71d85928744be7771e2143dab7, type: 2}

@@ -4,8 +4,9 @@
 Material:
   serializedVersion: 6
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_Name: PolygonNature_Tree_Trunk
   m_Shader: {fileID: 4800000, guid: 4b0390819f518774fa1a44198298459a, type: 3}
   m_ShaderKeywords: 
@@ -83,6 +84,8 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - _AO: 2.4
+    - _BaseLight: 0.35
     - _Big_Wave: 7.7
     - _Big_WindAmount: 0.4
     - _Big_Windspeed: 0.75
@@ -105,6 +108,7 @@ Material:
     - _Small_WindSpeed: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
+    - _SquashAmount: 1
     - _SrcBlend: 1
     - _Tree_Wave: 7.97
     - _Tree_WindAmount: 0.1
@@ -119,3 +123,5 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _ColorTint: {r: 1, g: 1, b: 1, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
+    - _TreeInstanceColor: {r: 1, g: 1, b: 1, a: 1}
+    - _TreeInstanceScale: {r: 1, g: 1, b: 1, a: 1}
