@@ -4,6 +4,7 @@ using UnityStandardAssets.CrossPlatformInput;
 using UnityStandardAssets.Utility;
 using Random = UnityEngine.Random;
 using PolyPerfect;
+using FMOD.Studio;
 
 public class PlayerCharacterController : MonoBehaviour
 {
@@ -23,9 +24,6 @@ public class PlayerCharacterController : MonoBehaviour
     [SerializeField] private LerpControlledBob m_JumpBob = new LerpControlledBob();
 
     [SerializeField] private float m_StepInterval;
-    [SerializeField] private AudioClip[] m_FootstepSounds;    // an array of footstep sounds that will be randomly selected from.
-    [SerializeField] private AudioClip m_JumpSound;           // the sound played when character leaves the ground.
-    [SerializeField] private AudioClip m_LandSound;           // the sound played when character touches back on ground.
 
     [SerializeField] private float playerAttackRange;
     [SerializeField] private float punchDamage;
@@ -42,13 +40,17 @@ public class PlayerCharacterController : MonoBehaviour
     private float m_StepCycle;
     private float m_NextStep;
     private bool m_Jumping;
-    private AudioSource m_AudioSource;
 
     [SerializeField] private float hungerWalkingThreshold;
     private PlayerMainController playerMainController;
     private PlayerHealth health;
 
     public Animator playerAnim;     //Variable to hol refrence to player animator
+
+    [FMODUnity.EventRef]
+    public string stepPath;
+
+    private EventInstance stepRef;
 
 
     // Use this for initialization
@@ -64,10 +66,9 @@ public class PlayerCharacterController : MonoBehaviour
         m_StepCycle = 0f;
         m_NextStep = m_StepCycle / 2f;
         m_Jumping = false;
-        m_AudioSource = GetComponent<AudioSource>();
         m_MouseLook.Init(transform, m_Camera.transform);
         health = this.GetComponent<PlayerHealth>();
-
+        stepRef = FMODUnity.RuntimeManager.CreateInstance(stepPath);
     }
 
     public void SetPositionAndRotation(Vector3 newPosition, Quaternion newRotation)
@@ -129,9 +130,9 @@ public class PlayerCharacterController : MonoBehaviour
 
     private void PlayLandingSound()
     {
-        m_AudioSource.clip = m_LandSound;
+        /*m_AudioSource.clip = m_LandSound;
         m_AudioSource.Play();
-        m_NextStep = m_StepCycle + .5f;
+        m_NextStep = m_StepCycle + .5f;*/
     }
 
 
@@ -190,8 +191,8 @@ public class PlayerCharacterController : MonoBehaviour
 
     private void PlayJumpSound()
     {
-        m_AudioSource.clip = m_JumpSound;
-        m_AudioSource.Play();
+        /*m_AudioSource.clip = m_JumpSound;
+        m_AudioSource.Play();*/
     }
 
 
@@ -220,14 +221,8 @@ public class PlayerCharacterController : MonoBehaviour
         {
             return;
         }
-        // pick & play a random footstep sound from the array,
-        // excluding sound at index 0
-        int n = Random.Range(1, m_FootstepSounds.Length);
-        m_AudioSource.clip = m_FootstepSounds[n];
-        m_AudioSource.PlayOneShot(m_AudioSource.clip);
-        // move picked sound to index 0 so it's not picked next time
-        m_FootstepSounds[n] = m_FootstepSounds[0];
-        m_FootstepSounds[0] = m_AudioSource.clip;
+        stepRef.setParameterByName("Step Material", 0);
+        stepRef.start();
     }
 
 
