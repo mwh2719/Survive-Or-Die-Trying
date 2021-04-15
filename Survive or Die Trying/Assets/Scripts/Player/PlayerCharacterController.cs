@@ -43,7 +43,21 @@ public class PlayerCharacterController : MonoBehaviour
 
     [SerializeField] private float hungerWalkingThreshold;
     private PlayerMainController playerMainController;
+    private Rigidbody playerRigidbody;
     private PlayerHealth health;
+    private Vector3 slidingDirection;
+    private bool isSliding = false;
+    public float slidingStrength = 3.5f;
+    private float slidingTime = 0;
+    public bool inWater = false;
+    public bool isSwimming = false;
+    private float swimmingTime = 0;
+    public float timeBeforeDrowning = 10;
+    private float cameraOffset = 0;
+    public float cameraBobbingStrength = 0;
+    public float fallingSpeedForFallDamage = 5;
+    private float previousYSpeed = 0;
+    private float fallTimer = 0;
 
     public Animator playerAnim;     //Variable to hol refrence to player animator
 
@@ -59,6 +73,7 @@ public class PlayerCharacterController : MonoBehaviour
         playerAnim.fireEvents = false;
         playerMainController = GetComponent<PlayerMainController>();
         m_CharacterController = GetComponent<CharacterController>();
+        playerRigidbody = GetComponent<Rigidbody>();
         m_Camera = Camera.main;
         m_OriginalCameraPosition = m_Camera.transform.localPosition;
         m_FovKick.Setup(m_Camera);
@@ -67,7 +82,7 @@ public class PlayerCharacterController : MonoBehaviour
         m_NextStep = m_StepCycle / 2f;
         m_Jumping = false;
         m_MouseLook.Init(transform, m_Camera.transform);
-        health = this.GetComponent<PlayerHealth>();
+        health = GetComponent<PlayerHealth>();
         stepRef = FMODUnity.RuntimeManager.CreateInstance(stepPath);
     }
 
@@ -86,7 +101,6 @@ public class PlayerCharacterController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-
         m_Camera.transform.localPosition = new Vector3(m_Camera.transform.localPosition.x, m_Camera.transform.localPosition.y, .18f);//Fixing camera moving back inside player head
 
         playerAnim.SetInteger("Health", (int)health.CurrentHealth);
@@ -123,10 +137,20 @@ public class PlayerCharacterController : MonoBehaviour
         {
             m_MoveDir.y = 0f;
         }
+        
+        // Prevents player from being damaged if a glitch stutters the player insanely fast into the ground when they really haven't fell
+        if (!m_CharacterController.isGrounded)
+        {
+            fallTimer += Time.deltaTime;
+        }
+        else
+        {
+            fallTimer = 0;
+        }
 
+        previousYSpeed = m_CharacterController.velocity.y;
         m_PreviouslyGrounded = m_CharacterController.isGrounded;
     }
-
 
     private void PlayLandingSound()
     {
@@ -135,7 +159,6 @@ public class PlayerCharacterController : MonoBehaviour
         m_NextStep = m_StepCycle + .5f;*/
     }
 
-
     public bool getIsWalking()
     {
         return m_IsWalking;
@@ -143,27 +166,92 @@ public class PlayerCharacterController : MonoBehaviour
 
     private void FixedUpdate()
     {
-
         float speed;
         GetInput(out speed);
-        // always move along the camera forward as it is the direction that it being aimed at
+
+        // Move the player in the specified input direction.
+        // This allows changing movement in mid-air as it feels more natural in games and prevents "sticking" on trees.
         Vector3 desiredMove = transform.forward * m_Input.y + transform.right * m_Input.x;
+        if (!m_Jumping)
+        {
+            // get a normal for the surface that is being touched to move along it
+            RaycastHit hitInfo;
+            Physics.SphereCast(transform.position, m_CharacterController.radius, Vector3.down, out hitInfo,
+                                m_CharacterController.height / 2f, Physics.AllLayers, QueryTriggerInteraction.Ignore);
+            desiredMove = Vector3.ProjectOnPlane(desiredMove, hitInfo.normal).normalized;
+        }
 
-        // get a normal for the surface that is being touched to move along it
-        RaycastHit hitInfo;
-        Physics.SphereCast(transform.position, m_CharacterController.radius, Vector3.down, out hitInfo,
-                           m_CharacterController.height / 2f, Physics.AllLayers, QueryTriggerInteraction.Ignore);
-        desiredMove = Vector3.ProjectOnPlane(desiredMove, hitInfo.normal).normalized;
-
+        // Prevent players sticking to mountainside by running to it
+        if (isSliding)
+        {
+            slidingTime += Time.fixedDeltaTime;
+            // speed up sliding over time
+            slidingDirection *= ((slidingTime / 3) + 1);
+            if (m_IsWalking)
+            {
+                speed /= 3;
+            }
+            else
+            {
+                speed /= 6;
+            }
+        }
         m_MoveDir.x = desiredMove.x * speed;
         m_MoveDir.z = desiredMove.z * speed;
 
         playerAnim.SetFloat("Speed", speed);
 
-
-        if (m_CharacterController.isGrounded)
+        // move slower when in water
+        if (inWater)
         {
-            m_MoveDir.y = -m_StickToGroundForce;
+            //stop sliding/jumping when in water
+            isSliding = false;
+            m_Jump = false;
+            m_Jumping = false;
+            slidingTime = 0;
+
+            // Holding running while swimming gives a smaller speed boost
+            if (m_IsWalking)
+            {
+                m_MoveDir *= 0.45f;
+            }
+            else
+            {
+                m_MoveDir *= 0.35f;
+            }
+
+            // we are now in swimming mode. Sink slowly...
+            if (isSwimming)
+            {
+                m_MoveDir += (Physics.gravity * 0.075f * Time.fixedDeltaTime);
+
+                // move up and down to simulate swimming
+                float bobbingSpeed = Mathf.Sin(Time.realtimeSinceStartup * 3);
+                m_MoveDir += Vector3.up * bobbingSpeed * cameraBobbingStrength * Time.fixedDeltaTime;
+                swimmingTime += Time.deltaTime;
+
+
+                // swimming takes hunger
+                playerMainController.CurrentHunger += -0.01f;
+            }
+            // sink into water if we can touch bottom
+            else
+            {
+                swimmingTime = 0;
+                m_MoveDir += Physics.gravity * m_GravityMultiplier * 0.75f * Time.fixedDeltaTime;
+            }
+
+            // Down if player is swimming too long
+            if (swimmingTime >= timeBeforeDrowning)
+            {
+                health.TakeDamage(0.1f, Categories.DAMAGE_TYPE.DROWNING);
+            }
+        }
+        // Disallow jumping in mid-air or sliding. If sliding longer than 3 seconds, allow jumping as player may be stuck.
+        else if ((!isSliding && m_CharacterController.isGrounded) || (isSliding && slidingTime > 3))
+        {
+            // Seems to be not needed and causes slamming into ground. Keep this commented out
+           // m_MoveDir.y = -m_StickToGroundForce;
 
             if (m_Jump)
             {
@@ -171,6 +259,8 @@ public class PlayerCharacterController : MonoBehaviour
                 PlayJumpSound();
                 m_Jump = false;
                 m_Jumping = true;
+                isSliding = false;
+                slidingTime = 0; // reset so players need to wait 3 seconds before jumping again if doing it while sliding
 
                 // make jumping cost hunger
                 playerMainController.CurrentHunger += -0.1f;
@@ -180,14 +270,27 @@ public class PlayerCharacterController : MonoBehaviour
         {
             m_MoveDir += Physics.gravity * m_GravityMultiplier * Time.fixedDeltaTime;
         }
+
+        // Apply sliding force. This is a zero vector if not sliding
+        if (!m_Jumping)
+        {
+            m_MoveDir += slidingDirection;
+        }
         m_CollisionFlags = m_CharacterController.Move(m_MoveDir * Time.fixedDeltaTime);
+
+        // reset camera bobbing when exiting water
+        if(!inWater && cameraOffset != 0)
+        {
+            m_Camera.transform.Translate(0, cameraOffset, 0, Space.World);
+            cameraOffset = 0;
+        }
 
         ProgressStepCycle(speed);
         UpdateCameraPosition(speed);
 
         m_MouseLook.UpdateCursorLock();
     }
-
+    
 
     private void PlayJumpSound()
     {
@@ -295,23 +398,54 @@ public class PlayerCharacterController : MonoBehaviour
         m_MouseLook.LookRotation(transform, m_Camera.transform);
     }
 
-
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
+        // Deals fall damage if it hits ground at high speed
+        float collisionAngle = Vector3.Angle(hit.normal, Vector3.up);
+        if (fallTimer > 0.35f && collisionAngle < 75f && previousYSpeed < -fallingSpeedForFallDamage)
+        {
+            health.TakeDamage(Mathf.Pow(previousYSpeed, 2) / fallingSpeedForFallDamage, Categories.DAMAGE_TYPE.KINETIC);
+        }
+        
         Rigidbody body = hit.collider.attachedRigidbody;
+
+        // detects if player should be sliding and will create the sliding vector if so.
+        // FixedUpdate will take that vector to actually apply sliding
+        if (!inWater && collisionAngle > m_CharacterController.slopeLimit)
+        {
+            isSliding = true;
+            Vector3 normal = hit.normal;
+            Vector3 c = Vector3.Cross(Vector3.up, normal);
+            Vector3 u = Vector3.Cross(c, normal);
+            u.z = Mathf.Clamp(u.z, -1, -0.1f);
+            if (c.magnitude < 0.2f)
+            {
+                u *= 0.1f;
+            }
+            slidingDirection = u * slidingStrength;
+        }
+        // Is not sliding, reset variables
+        else
+        {
+            isSliding = false;
+            slidingTime = 0;
+            slidingDirection = Vector3.zero;
+        }
+
+        if (body == null)
+        {
+            return;
+        }
+
         //dont move the rigidbody if the character is on top of it
         if (m_CollisionFlags == CollisionFlags.Below)
         {
             return;
         }
 
-        if (body == null || body.isKinematic)
-        {
-            return;
-        }
-        body.AddForceAtPosition(m_CharacterController.velocity * 0.1f, hit.point, ForceMode.Impulse);
+        body.AddForceAtPosition(m_CharacterController.velocity * 0.1f + slidingDirection, hit.point, ForceMode.Impulse);
     }
-
+    
     private void Punch()
     {
         playerAnim.SetTrigger("Punch");
@@ -324,7 +458,5 @@ public class PlayerCharacterController : MonoBehaviour
                 animalHit.TakeDamage(punchDamage);
             }
         }
-
-
     }
 }

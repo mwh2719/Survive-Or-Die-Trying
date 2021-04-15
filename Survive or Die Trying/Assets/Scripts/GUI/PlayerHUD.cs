@@ -11,7 +11,7 @@ public class PlayerHUD : MonoBehaviour
     /// </summary>
     void Update()
     {
-        if (PauseController.inGui)
+        if (PauseController.gameIsPaused)
         {
             if (!isHidden)
             {
