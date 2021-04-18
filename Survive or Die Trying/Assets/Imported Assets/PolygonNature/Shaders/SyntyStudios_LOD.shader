@@ -29,7 +29,7 @@ Shader "SyntyStudios/LOD"
 		#pragma multi_compile_instancing
 		#pragma instancing_options procedural:SetupNatureRenderer
 
-		#include "Assets/Imported Assets/Visual Design Cafe/Nature Shaders/Common/Nodes/Integrations/Nature Renderer.cginc"
+		#include "Assets/Visual Design Cafe/Nature Shaders/Common/Nodes/Integrations/Nature Renderer.cginc"
 		#include "VS_indirect.cginc"
 		#pragma surface surf Standard keepalpha addshadow fullforwardshadows 
 		struct Input
