@@ -21,6 +21,8 @@ public class TimeBehavior : MonoBehaviour
 	private float dayTimer;     //Timer to keep track how far through the day it is
 	private float nightTimer;     //Timer to keep track how far through the night it is
 
+	private float duskDawnLength;	//Variable to hold value of one 24th of the day length to be used as dusk and dawn
+
 
 	[SerializeField]
 	private TerrainData mapData;    //Variable to hold refrence to map data
@@ -29,7 +31,7 @@ public class TimeBehavior : MonoBehaviour
 
 	private DayState currentDayState;   //Enum to save wether it is currently day or night
 
-	public Material skybox;        //Holds reference to the skybox displayed material during the day
+	private Material skybox;        //Holds reference to the skybox displayed material during the day
 
 
 	// Start is called before the first frame update
@@ -42,6 +44,7 @@ public class TimeBehavior : MonoBehaviour
 		CalcSecondsOfDay();
 		CalcSecondsOfNight();
 		sun.transform.position = new Vector3(0, centerOfMap.y, 0);
+		skybox = RenderSettings.skybox;
 	}
 
 	// Update is called once per frame
@@ -67,6 +70,16 @@ public class TimeBehavior : MonoBehaviour
 				sunOptions.shadowStrength = 0f;
 				CalcSecondsOfNight();
 			}
+			//Dusk behavior
+			else if (dayTimer - duskDawnLength <= 0)
+			{
+				sunOptions.intensity = .2f + (dayTimer / duskDawnLength);
+			}
+			//Dawn behaviordis
+			else if (dayTimer > lengthOfDaySeconds - duskDawnLength)
+            {
+				sunOptions.intensity = .2f + (lengthOfDaySeconds - dayTimer) / duskDawnLength;
+			}
 		}
 		else if (currentDayState == DayState.Night)
 		{
@@ -75,7 +88,6 @@ public class TimeBehavior : MonoBehaviour
 			{
 				sun.transform.position = new Vector3(0, centerOfMap.y, 0);
 				currentDayState = DayState.Day;
-				sunOptions.intensity = 1;
 				sunOptions.shadowStrength = .25f;
 				CalcSecondsOfDay();
 			}
@@ -88,6 +100,7 @@ public class TimeBehavior : MonoBehaviour
 	private void CalcSecondsOfDay()
 	{
 		lengthOfDaySeconds = lengthOfDay * 60f;
+		duskDawnLength = lengthOfDaySeconds / 24;
 		dayTimer = lengthOfDaySeconds;
 	}
 

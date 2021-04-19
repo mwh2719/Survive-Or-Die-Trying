@@ -215,11 +215,12 @@ MonoBehaviour:
   playerAttackRange: 1.5
   punchDamage: 2
   hungerWalkingThreshold: 10
-  slidingStength: 3.5
+  slidingStrength: 3.5
   inWater: 0
   isSwimming: 0
   timeBeforeDrowning: 20
   cameraBobbingStrength: 5
+  fallingSpeedForFallDamage: 17
   playerAnim: {fileID: 9037648302713680882}
   stepPath: event:/Step
 --- !u!95 &678320450
