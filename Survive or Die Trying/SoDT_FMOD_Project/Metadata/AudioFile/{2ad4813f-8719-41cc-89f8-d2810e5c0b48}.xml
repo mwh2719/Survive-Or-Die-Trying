@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.01.00">
+	<object class="AudioFile" id="{2ad4813f-8719-41cc-89f8-d2810e5c0b48}">
+		<property name="assetPath">
+			<value>Axe Tree Hit.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>0.81746031746031744</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{a67bc966-a3a4-4c49-b2ac-6fad2233a1ce}</destination>
+		</relationship>
+	</object>
+</objects>

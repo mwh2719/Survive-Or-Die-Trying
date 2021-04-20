@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.01.00">
+	<object class="AudioFile" id="{453a0db6-732a-4122-a355-1f6a3a6a21ec}">
+		<property name="assetPath">
+			<value>Swimming Loop.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>6.8039682539682538</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{a67bc966-a3a4-4c49-b2ac-6fad2233a1ce}</destination>
+		</relationship>
+	</object>
+</objects>

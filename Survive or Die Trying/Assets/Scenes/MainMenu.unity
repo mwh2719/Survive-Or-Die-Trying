@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 91743579}
   - component: {fileID: 91743578}
   - component: {fileID: 91743577}
+  - component: {fileID: 91743580}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -146,7 +147,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 91743576}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &91743578
 Camera:
   m_ObjectHideFlags: 0
@@ -204,6 +205,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &91743580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 91743576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attenuationObject: {fileID: 91743576}
+  ListenerNumber: -1
 --- !u!1 &254362770
 GameObject:
   m_ObjectHideFlags: 0
@@ -673,6 +688,7 @@ GameObject:
   - component: {fileID: 550759184}
   - component: {fileID: 550759183}
   - component: {fileID: 550759182}
+  - component: {fileID: 550759185}
   m_Layer: 5
   m_Name: ControlsBtn
   m_TagString: playGame
@@ -780,6 +796,29 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 550759180}
   m_CullTransparentMesh: 0
+--- !u!114 &550759185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 550759180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  Event: event:/UI/Button Click
+  PlayEvent: 15
+  StopEvent: 16
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 0
+  OverrideMaxDistance: 0
 --- !u!1 &558357222
 GameObject:
   m_ObjectHideFlags: 0
@@ -1154,6 +1193,7 @@ GameObject:
   - component: {fileID: 1167859905}
   - component: {fileID: 1167859904}
   - component: {fileID: 1167859903}
+  - component: {fileID: 1167859906}
   m_Layer: 5
   m_Name: playGameBtn
   m_TagString: playGame
@@ -1261,6 +1301,29 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1167859901}
   m_CullTransparentMesh: 0
+--- !u!114 &1167859906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1167859901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  Event: event:/UI/Button Click
+  PlayEvent: 15
+  StopEvent: 16
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 0
+  OverrideMaxDistance: 0
 --- !u!1 &1188654158
 GameObject:
   m_ObjectHideFlags: 0
@@ -1867,6 +1930,7 @@ GameObject:
   - component: {fileID: 1714909567}
   - component: {fileID: 1714909566}
   - component: {fileID: 1714909565}
+  - component: {fileID: 1714909568}
   m_Layer: 5
   m_Name: QuitGameBtn
   m_TagString: playGame
@@ -1936,18 +2000,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1714909566}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 1
+      m_Calls: []
 --- !u!114 &1714909566
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1985,6 +2038,29 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1714909563}
   m_CullTransparentMesh: 0
+--- !u!114 &1714909568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1714909563}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  Event: event:/UI/Button Click Back
+  PlayEvent: 15
+  StopEvent: 16
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 0
+  OverrideMaxDistance: 0
 --- !u!1 &1816320475
 GameObject:
   m_ObjectHideFlags: 0
@@ -2233,6 +2309,7 @@ GameObject:
   - component: {fileID: 2093493997}
   - component: {fileID: 2093493996}
   - component: {fileID: 2093493995}
+  - component: {fileID: 2093493998}
   m_Layer: 5
   m_Name: SettingsBtn
   m_TagString: playGame
@@ -2340,3 +2417,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2093493993}
   m_CullTransparentMesh: 0
+--- !u!114 &2093493998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2093493993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  Event: event:/UI/Button Click
+  PlayEvent: 15
+  StopEvent: 16
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 0
+  OverrideMaxDistance: 0

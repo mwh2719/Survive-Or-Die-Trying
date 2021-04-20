@@ -63,8 +63,10 @@ public class PlayerCharacterController : MonoBehaviour
 
     [FMODUnity.EventRef]
     public string stepPath;
-
+    [FMODUnity.EventRef]
+    public string jumpPath;
     private EventInstance stepRef;
+    private EventInstance jumpRef;
 
 
     // Use this for initialization
@@ -84,6 +86,7 @@ public class PlayerCharacterController : MonoBehaviour
         m_MouseLook.Init(transform, m_Camera.transform);
         health = GetComponent<PlayerHealth>();
         stepRef = FMODUnity.RuntimeManager.CreateInstance(stepPath);
+        jumpRef = FMODUnity.RuntimeManager.CreateInstance(jumpPath);
     }
 
     public void SetPositionAndRotation(Vector3 newPosition, Quaternion newRotation)
@@ -296,6 +299,7 @@ public class PlayerCharacterController : MonoBehaviour
     {
         /*m_AudioSource.clip = m_JumpSound;
         m_AudioSource.Play();*/
+        jumpRef.start();
     }
 
 
@@ -324,7 +328,6 @@ public class PlayerCharacterController : MonoBehaviour
         {
             return;
         }
-        stepRef.setParameterByName("Step Material", 0);
         stepRef.start();
     }
 
