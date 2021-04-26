@@ -20,3 +20,4 @@ MonoBehaviour:
   healthRestoration: -10
   hungerRestoration: 5
   thirstRestoration: 1
+  longTermEffectDuration: 10

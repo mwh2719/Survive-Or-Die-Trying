@@ -5,8 +5,9 @@ using UnityStandardAssets.Characters.FirstPerson;
 
 public class PauseController : MonoBehaviour
 {
-    public static bool inGui;
-    public static bool gameIsPaused;
+    public static bool inGui = false;
+    public static bool gameIsPaused = false;
+    public static bool gameOver = false;
     public static PlayerCharacterController playerCharacterController;
 
     /// <summary>
@@ -14,7 +15,9 @@ public class PauseController : MonoBehaviour
     /// </summary>
     void Awake()
     {
-        playerCharacterController = FindObjectOfType<PlayerCharacterController>();
+        gameOver = false;
+        playerCharacterController = GameObject.Find("Player").GetComponent<PlayerCharacterController>();
+        ForcePauseState(false, false);
     }
 
     /// <summary>
@@ -31,15 +34,6 @@ public class PauseController : MonoBehaviour
                 inGui = false;
             }
         }
-    }
-
-    /// <summary>
-    /// Switch between paused and unpaused.
-    /// </summary>
-    public static void TogglePausing()
-    {
-        gameIsPaused = !gameIsPaused;
-        StateChange(gameIsPaused);
     }
 
     /// <summary>

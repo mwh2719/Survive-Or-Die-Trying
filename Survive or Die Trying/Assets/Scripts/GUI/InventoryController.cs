@@ -40,7 +40,7 @@ public class InventoryController : MonoBehaviour
     /// </summary>
     void Update()
     {
-        if (Input.GetButtonDown("Inventory"))
+        if (Input.GetButtonDown("Inventory") && !PauseController.gameOver)
         {
             // Do not open inventory screen when in another screen
             if(PauseController.inGui && !inventoryCanvas.activeSelf)

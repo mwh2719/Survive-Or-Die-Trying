@@ -10,6 +10,8 @@ public class EdibleItem : Item
     public float healthRestoration = 0;
     public float hungerRestoration;
     public float thirstRestoration;
+    [Header("Set to 0 to do instant effects")]
+    public float longTermEffectDuration;
 
     /// <summary>
     /// Foods can always be eaten.
@@ -35,11 +37,25 @@ public class EdibleItem : Item
         {
             if(healthRestoration > 0)
             {
-                playerHealth.Heal(healthRestoration, Categories.HEAL_TYPE.MEDICINE);
+                if(longTermEffectDuration > 0)
+                {
+                    playerHealth.HealOverTime(healthRestoration, longTermEffectDuration, Categories.HEAL_TYPE.MEDICINE);
+                }
+                else
+                {
+                    playerHealth.Heal(healthRestoration, Categories.HEAL_TYPE.MEDICINE);
+                }
             }
             else
             {
-                playerHealth.TakeDamage(Math.Abs(healthRestoration), Categories.DAMAGE_TYPE.POISON);
+                if (longTermEffectDuration > 0)
+                {
+                    playerHealth.TakeDamageOverTime(Math.Abs(healthRestoration), longTermEffectDuration, Categories.DAMAGE_TYPE.POISON);
+                }
+                else
+                {
+                    playerHealth.TakeDamage(Math.Abs(healthRestoration), Categories.DAMAGE_TYPE.POISON);
+                }
             }
             userStats.CurrentHunger += hungerRestoration;
             userStats.CurrentThirst += thirstRestoration;

@@ -34,6 +34,7 @@ public class PlayerStatsGUI : MonoBehaviour
         healthBar.value = playerHealth.CurrentHealth;
         thirstBar.value = playerMainController.CurrentThirst;
         hungerBar.value = playerMainController.CurrentHunger;
+       
     }
     
     /// <summary>

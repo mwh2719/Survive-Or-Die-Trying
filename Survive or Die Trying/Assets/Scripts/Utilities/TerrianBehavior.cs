@@ -4,18 +4,21 @@ using UnityEngine;
 
 public class TerrianBehavior : MonoBehaviour
 {
+    Terrain map;    //Variable to hold refrence to the terrain
     TerrainData mapData;    //Variable to hold refrence to the terrain data
     TreePrototype[] treeProtoList;  //Variable to hold array of the tree prototypes
     GameObject[] treeList;  //Variable to hold array of the tree objects that were used to make the prototypes
-    TreeInstance[] originalTrees;   //Array to hold where the trees were originally so that the map data will be restored when the aplication quits
+    string[] maskLayers = { "Water", "Terrain", "Stone" };
+
+    LayerMask mask;  //Variable to hold the mask for checking the object spanwer against
     // Start is called before the first frame update
     void Start()
     {
-        //saving the terrain data tree array 
-        originalTrees = this.GetComponent<Terrain>().terrainData.treeInstances;
-
+        this.GetComponent<Terrain>().drawTreesAndFoliage = false;
         //getting refernce to terrain data
-        mapData = this.GetComponent<Terrain>().terrainData;
+        map = this.GetComponent<Terrain>();
+        mapData = map.terrainData;
+        mask = LayerMask.GetMask(maskLayers);
 
         //getting the tree prototypes
         treeProtoList = mapData.treePrototypes;
@@ -62,24 +65,44 @@ public class TerrianBehavior : MonoBehaviour
             treeObject.transform.localScale = new Vector3(width, height, width);
             
         }
-
-        //clearing the terrain tree instance array
-        this.GetComponent<Terrain>().terrainData.treeInstances = new List<TreeInstance>().ToArray();
     }
 
     public void PlaceObjects(GameObject placedObject)
     {
-        Vector3 randLocation;
+        Vector3 randLocation = SetRandomLocation();
+        GameObject temp;
+        int countToSpawn = Random.Range(10, 40);
 
-
-        //Add code that checks to ensure there is not ground above the random location
-        
- 
+        for (int i = 0; i < countToSpawn; i++)
+        {
+            do
+            //Add code that checks to ensure there is not ground above the random location
+            if (Physics.Raycast(randLocation, Vector3.up, Mathf.Infinity, mask))
+            {
+                randLocation = SetRandomLocation();
+            }
+            else
+            {
+                temp = Instantiate(placedObject, randLocation, new Quaternion());
+                randLocation = SetRandomLocation();
+                break;
+            }
+            while (true);
+        }
     }
 
-    private void OnApplicationQuit()
+    private Vector3 SetRandomLocation()
     {
-        //reverting the tree instance terrain data
-        this.GetComponent<Terrain>().terrainData.treeInstances = originalTrees;
+        map = this.GetComponent<Terrain>();
+        mapData = map.terrainData;
+        mask = LayerMask.GetMask(maskLayers);
+        Vector3 centerMap = mapData.bounds.center;
+        centerMap = this.transform.TransformPoint(centerMap);
+        float halfMapX = mapData.bounds.size.x / 2;
+        float halfMapZ = mapData.bounds.size.z / 2;
+        Vector3 random = new Vector3(Random.Range(centerMap.x-halfMapX, centerMap.x + halfMapX), 0, Random.Range(centerMap.z - halfMapZ, centerMap.z + halfMapZ));
+        random.y = Terrain.activeTerrain.SampleHeight(random);
+        return random;
     }
+
 }

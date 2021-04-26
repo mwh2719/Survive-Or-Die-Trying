@@ -10,7 +10,7 @@ public class MainMenu : MonoBehaviour
     Button playGameBtn;
     Button quitGameBtn;
     Button controlsBtn;
-    Canvas controls;
+    GameObject controls;
     /// <summary>
     /// Attaches behavior to the play button on the main menu. 
     /// Also adds quit app and load controls screen functionality.
@@ -23,8 +23,8 @@ public class MainMenu : MonoBehaviour
         quitGameBtn.onClick.AddListener(QuitGame);
         controlsBtn = GameObject.Find("ControlsBtn").GetComponent<Button>();
         controlsBtn.onClick.AddListener(ViewControls);
-        controls = GameObject.Find("ControlsCanvas").GetComponent<Canvas>();
-        controls.enabled = false;
+        controls = GameObject.Find("ControlsCanvas");
+        controls.SetActive(false);
 
 
     }
@@ -32,7 +32,7 @@ public class MainMenu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (controls.enabled)
+        if (controls.activeSelf)
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
@@ -51,13 +51,13 @@ public class MainMenu : MonoBehaviour
 
     void ViewControls()
     {
-        controls.enabled = true;
+        controls.SetActive(true);
        
         
     }
     void CloseControls()
     {
-        controls.enabled = false;
+        controls.SetActive(false);
     }
 }
 

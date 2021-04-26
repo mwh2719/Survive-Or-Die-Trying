@@ -24,7 +24,7 @@ public class PauseScreen : MonoBehaviour
     /// </summary>
     void Update()
     {
-        if(Input.GetButtonDown("Pause"))
+        if(Input.GetButtonDown("Pause") && !PauseController.gameOver)
         {
             pauseMenu.SetActive(!pauseMenu.activeSelf);
             PauseController.ForcePauseState(pauseMenu.activeSelf, pauseMenu.activeSelf);

@@ -15,9 +15,12 @@ public class Interactable : MonoBehaviour
     /// </summary>
     public void Start()
     {
-        Outline outlineShader = gameObject.AddComponent(typeof(Outline)) as Outline;
-        outlineShader.color = 33973;
-        outlineShader.enabled = false;
+        if (gameObject.GetComponent<Renderer>())
+        {
+            Outline outlineShader = gameObject.AddComponent(typeof(Outline)) as Outline;
+            outlineShader.color = 33973;
+            outlineShader.enabled = false;
+        }
         interactionTransform = transform;
     }
 

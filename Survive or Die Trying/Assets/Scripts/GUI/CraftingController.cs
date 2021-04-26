@@ -41,7 +41,7 @@ public class CraftingController : MonoBehaviour
     /// </summary>
     void Update()
     {
-        if(Input.GetButtonDown("Crafting"))
+        if(Input.GetButtonDown("Crafting") && !PauseController.gameOver)
         {
             // Do not open crafting screen when in another screen
             if (PauseController.inGui && !craftingCanvas.activeSelf)

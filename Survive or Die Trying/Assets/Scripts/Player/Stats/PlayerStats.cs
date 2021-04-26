@@ -76,5 +76,9 @@ public class PlayerStats : MonoBehaviour
         {
             playerHealth.TakeDamage(0.001f, Categories.DAMAGE_TYPE.THIRST);
         }
+      
+       
     }
+   
 }
+

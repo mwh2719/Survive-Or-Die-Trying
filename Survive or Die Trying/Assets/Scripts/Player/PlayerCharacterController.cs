@@ -187,16 +187,23 @@ public class PlayerCharacterController : MonoBehaviour
         // Prevent players sticking to mountainside by running to it
         if (isSliding)
         {
-            slidingTime += Time.fixedDeltaTime;
-            // speed up sliding over time
-            slidingDirection *= ((slidingTime / 3) + 1);
-            if (m_IsWalking)
+            if (!m_CharacterController.isGrounded)
             {
-                speed /= 3;
+                slidingDirection = slidingDirection.normalized * 0.1f;
             }
             else
             {
-                speed /= 6;
+                slidingTime += Time.fixedDeltaTime;
+                // speed up sliding over time
+                slidingDirection *= ((slidingTime / 2) + 1);
+                if (m_IsWalking)
+                {
+                    speed /= 3;
+                }
+                else
+                {
+                    speed /= 6;
+                }
             }
         }
         m_MoveDir.x = desiredMove.x * speed;
@@ -253,8 +260,10 @@ public class PlayerCharacterController : MonoBehaviour
         // Disallow jumping in mid-air or sliding. If sliding longer than 3 seconds, allow jumping as player may be stuck.
         else if ((!isSliding && m_CharacterController.isGrounded) || (isSliding && slidingTime > 3))
         {
-            // Seems to be not needed and causes slamming into ground. Keep this commented out
-           // m_MoveDir.y = -m_StickToGroundForce;
+            if (m_PreviouslyGrounded)
+            {
+                m_MoveDir.y = -m_StickToGroundForce;
+            }
 
             if (m_Jump)
             {
@@ -420,12 +429,20 @@ public class PlayerCharacterController : MonoBehaviour
             Vector3 normal = hit.normal;
             Vector3 c = Vector3.Cross(Vector3.up, normal);
             Vector3 u = Vector3.Cross(c, normal);
-            u.z = Mathf.Clamp(u.z, -1, -0.1f);
+            u.y = Mathf.Clamp(u.y, -0.75f, -0.1f);
             if (c.magnitude < 0.2f)
             {
                 u *= 0.1f;
             }
             slidingDirection = u * slidingStrength;
+            /*
+            //source: http://answers.unity.com/answers/1387707/view.html
+            slidingDirection = new Vector3
+            {
+                x = ((1f - normal.y) * normal.x) * slidingStrength,
+                z = ((1f - normal.y) * normal.z) * slidingStrength
+            };
+            */
         }
         // Is not sliding, reset variables
         else
@@ -445,7 +462,6 @@ public class PlayerCharacterController : MonoBehaviour
         {
             return;
         }
-
         body.AddForceAtPosition(m_CharacterController.velocity * 0.1f + slidingDirection, hit.point, ForceMode.Impulse);
     }
     
