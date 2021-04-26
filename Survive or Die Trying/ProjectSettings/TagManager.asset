@@ -9,6 +9,9 @@ TagManager:
   - playGame
   - healthBar
   - terrain
+  - Fire
+  - AffirmativeButton
+  - BackButton
   layers:
   - Default
   - TransparentFX

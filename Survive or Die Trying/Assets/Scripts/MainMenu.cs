@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using FMOD.Studio;
 
 public class MainMenu : MonoBehaviour
 {
@@ -11,6 +12,15 @@ public class MainMenu : MonoBehaviour
     Button quitGameBtn;
     Button controlsBtn;
     GameObject controls;
+
+    [FMODUnity.EventRef]
+    public string buttonClickPath;
+    [FMODUnity.EventRef]
+    public string backButtonClickPath;
+
+    private EventInstance buttonClickRef;
+    private EventInstance backButtonClickRef;
+
     /// <summary>
     /// Attaches behavior to the play button on the main menu. 
     /// Also adds quit app and load controls screen functionality.
@@ -26,7 +36,8 @@ public class MainMenu : MonoBehaviour
         controls = GameObject.Find("ControlsCanvas");
         controls.SetActive(false);
 
-
+        buttonClickRef = FMODUnity.RuntimeManager.CreateInstance(buttonClickPath);
+        backButtonClickRef = FMODUnity.RuntimeManager.CreateInstance(backButtonClickPath);
     }
 
     // Update is called once per frame
@@ -58,6 +69,18 @@ public class MainMenu : MonoBehaviour
     void CloseControls()
     {
         controls.SetActive(false);
+    }
+
+    public void PlayButtonAudio(GameObject button)
+    {
+        if(button.tag == "AffirmativeButton")
+        {
+            buttonClickRef.start();
+        }
+        else if(button.tag == "BackButton")
+        {
+            backButtonClickRef.start();
+        }
     }
 }
 

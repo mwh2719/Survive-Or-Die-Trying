@@ -33797,9 +33797,9 @@ MonoBehaviour:
   _streamProcessorLimit: 0.25
   _streamInDistance: 50
   _streamOutDistance: 100
-  _detailDistance: 25
-  _reduceDensity: {x: 30, y: 100}
-  _reduceDensityAmount: 0
+  _detailDistance: 100
+  _reduceDensity: {x: 50, y: 100}
+  _reduceDensityAmount: 0.755
   _ditherScale: 10
   _billboardGrassMaterial: {fileID: 2100000, guid: 2e063fef9b35d2f4882cac33504cf7a9,
     type: 2}
@@ -35323,7 +35323,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_BoundingSphereOverride: {x: 0, y: 5.9398e-41, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0

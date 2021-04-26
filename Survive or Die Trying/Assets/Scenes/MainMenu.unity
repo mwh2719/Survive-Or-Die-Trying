@@ -690,7 +690,7 @@ GameObject:
   - component: {fileID: 550759182}
   m_Layer: 5
   m_Name: ControlsBtn
-  m_TagString: playGame
+  m_TagString: AffirmativeButton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -757,7 +757,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 550759183}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 558357227}
+        m_MethodName: PlayButtonAudio
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 550759180}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &550759183
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -907,6 +918,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 287c36b7b4fb38542973f075fe241cb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonClickPath: event:/UI/Button Click
+  backButtonClickPath: event:/UI/Button Click Back
 --- !u!1 &669262114
 GameObject:
   m_ObjectHideFlags: 0
@@ -1172,10 +1185,9 @@ GameObject:
   - component: {fileID: 1073286489}
   - component: {fileID: 1073286488}
   - component: {fileID: 1073286487}
-  - component: {fileID: 1073286491}
   m_Layer: 5
   m_Name: CloseButton
-  m_TagString: Untagged
+  m_TagString: BackButton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1267,6 +1279,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 558357227}
+        m_MethodName: PlayButtonAudio
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 1073286485}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1073286489
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1304,29 +1327,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1073286485}
   m_CullTransparentMesh: 0
---- !u!114 &1073286491
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1073286485}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  Event: event:/UI/Button Click
-  PlayEvent: 15
-  StopEvent: 16
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 0
-  OverrideMaxDistance: 0
 --- !u!1 &1112542877
 GameObject:
   m_ObjectHideFlags: 0
@@ -1419,7 +1419,7 @@ GameObject:
   - component: {fileID: 1167859903}
   m_Layer: 5
   m_Name: playGameBtn
-  m_TagString: playGame
+  m_TagString: AffirmativeButton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1486,7 +1486,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1167859904}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 558357227}
+        m_MethodName: PlayButtonAudio
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 1167859901}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1167859904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2027,6 +2038,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 287c36b7b4fb38542973f075fe241cb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonClickPath: 
+  backButtonClickPath: 
 --- !u!1 &1652593170
 GameObject:
   m_ObjectHideFlags: 0
@@ -2120,7 +2133,7 @@ GameObject:
   - component: {fileID: 1714909565}
   m_Layer: 5
   m_Name: QuitGameBtn
-  m_TagString: playGame
+  m_TagString: BackButton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2187,7 +2200,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1714909566}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 558357227}
+        m_MethodName: PlayButtonAudio
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 1714909563}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1714909566
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2475,7 +2499,7 @@ GameObject:
   - component: {fileID: 2093493995}
   m_Layer: 5
   m_Name: SettingsBtn
-  m_TagString: playGame
+  m_TagString: AffirmativeButton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2542,7 +2566,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2093493996}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 558357227}
+        m_MethodName: PlayButtonAudio
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 2093493993}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2093493996
 MonoBehaviour:
   m_ObjectHideFlags: 0
