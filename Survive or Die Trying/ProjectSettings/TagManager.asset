@@ -12,6 +12,9 @@ TagManager:
   - Fire
   - AffirmativeButton
   - BackButton
+  - Stone Zone
+  - Beach Zone
+  - Forest Zone
   layers:
   - Default
   - TransparentFX
@@ -25,9 +28,9 @@ TagManager:
   - Interactable
   - Terrain
   - Tree
-  - Beach Collider
-  - Forest Collider
-  - Stone Collider
+  - 
+  - 
+  - 
   - Stone
   - 
   - 

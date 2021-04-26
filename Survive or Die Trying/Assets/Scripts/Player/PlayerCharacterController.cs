@@ -478,4 +478,9 @@ public class PlayerCharacterController : MonoBehaviour
             }
         }
     }
+
+    public EventInstance StepRef
+    {
+        get { return stepRef; }
+    }
 }
