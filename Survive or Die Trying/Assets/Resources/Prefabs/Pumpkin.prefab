@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 6258995096274333866}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -50.731678, y: 5.232448, z: 0.09072399}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.559, y: 1.559, z: 1.559}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -108,5 +108,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   radius: 3
-  interactionTransform: {fileID: 6258995096274046252}
   item: {fileID: 11400000, guid: 9179df483c7c72b4a8953727b1b89762, type: 2}

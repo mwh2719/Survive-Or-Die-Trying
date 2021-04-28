@@ -31,8 +31,9 @@ public class TimeBehavior : MonoBehaviour
 
 	private DayState currentDayState;   //Enum to save wether it is currently day or night
 
-	private Material skybox;        //Holds reference to the skybox displayed material during the day
-
+	private Material daySkybox;        //Holds reference to the skybox displayed material during the day
+	[SerializeField]
+	private Material nightSkybox;        //Holds reference to the skybox displayed material during the night
 
 	// Start is called before the first frame update
 	void Start()
@@ -44,7 +45,7 @@ public class TimeBehavior : MonoBehaviour
 		CalcSecondsOfDay();
 		CalcSecondsOfNight();
 		sun.transform.position = new Vector3(0, centerOfMap.y, 0);
-		skybox = RenderSettings.skybox;
+		daySkybox = RenderSettings.skybox;
 	}
 
 	// Update is called once per frame
@@ -66,19 +67,20 @@ public class TimeBehavior : MonoBehaviour
 			{
 
 				currentDayState = DayState.Night;
-				sunOptions.intensity = .2f;
+				sunOptions.intensity = 0;
 				sunOptions.shadowStrength = 0f;
+				RenderSettings.skybox = nightSkybox;
 				CalcSecondsOfNight();
 			}
 			//Dusk behavior
 			else if (dayTimer - duskDawnLength <= 0)
 			{
-				sunOptions.intensity = .2f + (dayTimer / duskDawnLength);
+				sunOptions.intensity = (dayTimer / duskDawnLength);
 			}
 			//Dawn behaviordis
 			else if (dayTimer > lengthOfDaySeconds - duskDawnLength)
             {
-				sunOptions.intensity = .2f + (lengthOfDaySeconds - dayTimer) / duskDawnLength;
+				sunOptions.intensity = (lengthOfDaySeconds - dayTimer) / duskDawnLength;
 			}
 		}
 		else if (currentDayState == DayState.Night)
@@ -89,6 +91,7 @@ public class TimeBehavior : MonoBehaviour
 				sun.transform.position = new Vector3(0, centerOfMap.y, 0);
 				currentDayState = DayState.Day;
 				sunOptions.shadowStrength = .25f;
+				RenderSettings.skybox = daySkybox;
 				CalcSecondsOfDay();
 			}
 		}

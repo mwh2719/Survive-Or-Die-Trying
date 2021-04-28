@@ -71,7 +71,24 @@ public class TerrianBehavior : MonoBehaviour
     {
         Vector3 randLocation = SetRandomLocation();
         GameObject temp;
-        int countToSpawn = Random.Range(10, 40);
+        int countToSpawn = 0;
+        switch (placedObject.GetComponent<ItemPickupable>().item.Type)
+        {
+            case Categories.ITEM_TYPE.FOOD:
+                countToSpawn = Random.Range(40, 70);
+                break;
+            case Categories.ITEM_TYPE.MATERIAL:
+                countToSpawn = Random.Range(100, 300);
+                break;
+            case Categories.ITEM_TYPE.TOOL:
+                countToSpawn = 0;
+                break;
+            default:
+                countToSpawn = 0;
+                break;
+        }
+
+         
 
         for (int i = 0; i < countToSpawn; i++)
         {
@@ -83,7 +100,21 @@ public class TerrianBehavior : MonoBehaviour
             }
             else
             {
+
                 temp = Instantiate(placedObject, randLocation, new Quaternion());
+                    //temp.transform.rotation = Quaternion.LookRotation(mapData.GetInterpolatedNormal(temp.transform.position.x, temp.transform.position.z), Vector3.forward);
+                    switch (placedObject.name)
+                    {
+                        case "Stick":
+                            temp.transform.position = new Vector3(temp.transform.position.x, temp.transform.position.y + .1f, temp.transform.position.z);
+                            break;
+                        case "Stone":
+                            temp.transform.position = new Vector3(temp.transform.position.x, temp.transform.position.y +.2f, temp.transform.position.z);
+                            break;
+                        default:
+                            break;
+                    }
+                
                 randLocation = SetRandomLocation();
                 break;
             }

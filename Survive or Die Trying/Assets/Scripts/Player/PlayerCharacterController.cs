@@ -40,6 +40,7 @@ public class PlayerCharacterController : MonoBehaviour
     private float m_StepCycle;
     private float m_NextStep;
     private bool m_Jumping;
+    private bool isTouchingGround;
 
     [SerializeField] private float hungerWalkingThreshold;
     private PlayerMainController playerMainController;
@@ -129,37 +130,16 @@ public class PlayerCharacterController : MonoBehaviour
             m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
         }
 
-        if (!m_PreviouslyGrounded && m_CharacterController.isGrounded)
+        if (!m_PreviouslyGrounded && isTouchingGround)
         {
             StartCoroutine(m_JumpBob.DoBobCycle());
             PlayLandingSound();
-            m_MoveDir.y = 0f;
-            m_Jumping = false;
         }
-        if (!m_CharacterController.isGrounded && !m_Jumping && m_PreviouslyGrounded)
-        {
-            m_MoveDir.y = 0f;
-        }
-        
-        // Prevents player from being damaged if a glitch stutters the player insanely fast into the ground when they really haven't fell
-        if (!m_CharacterController.isGrounded)
-        {
-            fallTimer += Time.deltaTime;
-        }
-        else
-        {
-            fallTimer = 0;
-        }
-
-        previousYSpeed = m_CharacterController.velocity.y;
-        m_PreviouslyGrounded = m_CharacterController.isGrounded;
     }
 
     private void PlayLandingSound()
     {
-        /*m_AudioSource.clip = m_LandSound;
-        m_AudioSource.Play();
-        m_NextStep = m_StepCycle + .5f;*/
+        
     }
 
     public bool getIsWalking()
@@ -169,8 +149,55 @@ public class PlayerCharacterController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // use isTouchingGround instead of m_CharacterController.isGrounded as that is bugged with upward movement while touching ground.
+        RaycastHit hitInfo;
+        Physics.SphereCast(transform.position, m_CharacterController.radius + 0.0000001f, Vector3.down, out hitInfo,
+                           m_CharacterController.height / 2f - 0.1f, Physics.AllLayers, QueryTriggerInteraction.Ignore);
+        if (hitInfo.collider && (fallTimer == 0 || fallTimer > 0.1f))
+        {
+            isTouchingGround = true;
+        }
+        else
+        {
+            isTouchingGround = false;
+        }
+
+        // Get speed that player specifies
         float speed;
         GetInput(out speed);
+
+        if (isTouchingGround)
+        {
+            fallTimer = 0;
+            m_Jumping = false;
+
+            // Prevent players sticking to mountainside by making them slide down it
+            if (isSliding)
+            {
+                slidingTime += Time.fixedDeltaTime;
+                // speed up sliding over time
+                slidingDirection *= ((slidingTime / 1.5f) + 1);
+
+                // Make running/walking not be able to surpass sliding speed.
+                if (m_IsWalking)
+                {
+                    speed /= 2;
+                }
+                else
+                {
+                    speed /= 4;
+                }
+            }
+        }
+        else
+        {
+            // Prevents player from being damaged if a glitch stutters the player insanely fast into the ground when they really haven't fell
+            // Keep track of how long we have been falling for.
+            fallTimer += Time.deltaTime;
+
+            slidingDirection = Vector3.zero;
+            isSliding = false;
+        }
 
         // Move the player in the specified input direction.
         // This allows changing movement in mid-air as it feels more natural in games and prevents "sticking" on trees.
@@ -178,38 +205,24 @@ public class PlayerCharacterController : MonoBehaviour
         if (!m_Jumping)
         {
             // get a normal for the surface that is being touched to move along it
-            RaycastHit hitInfo;
-            Physics.SphereCast(transform.position, m_CharacterController.radius, Vector3.down, out hitInfo,
-                                m_CharacterController.height / 2f, Physics.AllLayers, QueryTriggerInteraction.Ignore);
             desiredMove = Vector3.ProjectOnPlane(desiredMove, hitInfo.normal).normalized;
         }
-
-        // Prevent players sticking to mountainside by running to it
-        if (isSliding)
-        {
-            if (!m_CharacterController.isGrounded)
-            {
-                slidingDirection = slidingDirection.normalized * 0.1f;
-            }
-            else
-            {
-                slidingTime += Time.fixedDeltaTime;
-                // speed up sliding over time
-                slidingDirection *= ((slidingTime / 2) + 1);
-                if (m_IsWalking)
-                {
-                    speed /= 3;
-                }
-                else
-                {
-                    speed /= 6;
-                }
-            }
-        }
-        m_MoveDir.x = desiredMove.x * speed;
-        m_MoveDir.z = desiredMove.z * speed;
+        
+        m_MoveDir = new Vector3(
+            desiredMove.x * speed,
+            isTouchingGround ? -m_StickToGroundForce : previousYSpeed, 
+            desiredMove.z * speed);
 
         playerAnim.SetFloat("Speed", speed);
+
+        // Apply sliding force. This is a zero vector if not sliding
+        m_MoveDir += slidingDirection;
+
+        // Apply regular land gravity
+        if (!inWater)
+        {
+            m_MoveDir += Physics.gravity * m_GravityMultiplier * Time.fixedDeltaTime;
+        }
 
         // move slower when in water
         if (inWater)
@@ -219,7 +232,7 @@ public class PlayerCharacterController : MonoBehaviour
             m_Jump = false;
             m_Jumping = false;
             slidingTime = 0;
-
+            
             // Holding running while swimming gives a smaller speed boost
             if (m_IsWalking)
             {
@@ -230,9 +243,11 @@ public class PlayerCharacterController : MonoBehaviour
                 m_MoveDir *= 0.35f;
             }
 
+
             // we are now in swimming mode. Sink slowly...
             if (isSwimming)
             {
+                // slower gravity pull
                 m_MoveDir += (Physics.gravity * 0.075f * Time.fixedDeltaTime);
 
                 // move up and down to simulate swimming
@@ -244,27 +259,23 @@ public class PlayerCharacterController : MonoBehaviour
                 // swimming takes hunger
                 playerMainController.CurrentHunger += -0.01f;
             }
-            // sink into water if we can touch bottom
+            // sink into water so we can touch bottom and aren't in swimming mode yet
             else
             {
                 swimmingTime = 0;
                 m_MoveDir += Physics.gravity * m_GravityMultiplier * 0.75f * Time.fixedDeltaTime;
             }
 
-            // Down if player is swimming too long
+            // Drown if player is swimming too long
             if (swimmingTime >= timeBeforeDrowning)
             {
                 health.TakeDamage(0.1f, Categories.DAMAGE_TYPE.DROWNING);
             }
         }
-        // Disallow jumping in mid-air or sliding. If sliding longer than 3 seconds, allow jumping as player may be stuck.
-        else if ((!isSliding && m_CharacterController.isGrounded) || (isSliding && slidingTime > 3))
-        {
-            if (m_PreviouslyGrounded)
-            {
-                m_MoveDir.y = -m_StickToGroundForce;
-            }
 
+        // Disallow jumping in mid-air or sliding. If sliding longer than 3 seconds, allow jumping as player may be stuck.
+        else if ((!isSliding && isTouchingGround) || (isSliding && slidingTime > 3))
+        {
             if (m_Jump)
             {
                 m_MoveDir.y = m_JumpSpeed;
@@ -278,16 +289,7 @@ public class PlayerCharacterController : MonoBehaviour
                 playerMainController.CurrentHunger += -0.1f;
             }
         }
-        else
-        {
-            m_MoveDir += Physics.gravity * m_GravityMultiplier * Time.fixedDeltaTime;
-        }
-
-        // Apply sliding force. This is a zero vector if not sliding
-        if (!m_Jumping)
-        {
-            m_MoveDir += slidingDirection;
-        }
+        Debug.Log(m_MoveDir + " isSliding: " + isSliding + " isGrounded: " + isTouchingGround);
         m_CollisionFlags = m_CharacterController.Move(m_MoveDir * Time.fixedDeltaTime);
 
         // reset camera bobbing when exiting water
@@ -296,21 +298,19 @@ public class PlayerCharacterController : MonoBehaviour
             m_Camera.transform.Translate(0, cameraOffset, 0, Space.World);
             cameraOffset = 0;
         }
-
         ProgressStepCycle(speed);
         UpdateCameraPosition(speed);
-
         m_MouseLook.UpdateCursorLock();
+
+        previousYSpeed = m_CharacterController.velocity.y;
+        m_PreviouslyGrounded = isTouchingGround;
     }
     
 
     private void PlayJumpSound()
     {
-        /*m_AudioSource.clip = m_JumpSound;
-        m_AudioSource.Play();*/
         jumpRef.start();
     }
-
 
     private void ProgressStepCycle(float speed)
     {
@@ -330,10 +330,9 @@ public class PlayerCharacterController : MonoBehaviour
         PlayFootStepAudio();
     }
 
-
     private void PlayFootStepAudio()
     {
-        if (!m_CharacterController.isGrounded)
+        if (!isTouchingGround)
         {
             return;
         }
@@ -348,7 +347,7 @@ public class PlayerCharacterController : MonoBehaviour
         {
             return;
         }
-        if (m_CharacterController.velocity.magnitude > 0 && m_CharacterController.isGrounded)
+        if (m_CharacterController.velocity.magnitude > 0 && isTouchingGround)
         {
             m_Camera.transform.localPosition =
                 m_HeadBob.DoHeadBob(m_CharacterController.velocity.magnitude +
@@ -414,9 +413,9 @@ public class PlayerCharacterController : MonoBehaviour
     {
         // Deals fall damage if it hits ground at high speed
         float collisionAngle = Vector3.Angle(hit.normal, Vector3.up);
-        if (fallTimer > 0.35f && collisionAngle < 75f && previousYSpeed < -fallingSpeedForFallDamage)
+        if (fallTimer > 0.35f && collisionAngle < 80f && previousYSpeed < -fallingSpeedForFallDamage)
         {
-            health.TakeDamage(Mathf.Pow(previousYSpeed, 2) / fallingSpeedForFallDamage, Categories.DAMAGE_TYPE.KINETIC);
+            health.TakeDamage(Mathf.Pow(Mathf.Abs(previousYSpeed), 2f) / fallingSpeedForFallDamage, Categories.DAMAGE_TYPE.KINETIC);
         }
         
         Rigidbody body = hit.collider.attachedRigidbody;
@@ -451,18 +450,6 @@ public class PlayerCharacterController : MonoBehaviour
             slidingTime = 0;
             slidingDirection = Vector3.zero;
         }
-
-        if (body == null)
-        {
-            return;
-        }
-
-        //dont move the rigidbody if the character is on top of it
-        if (m_CollisionFlags == CollisionFlags.Below)
-        {
-            return;
-        }
-        body.AddForceAtPosition(m_CharacterController.velocity * 0.1f + slidingDirection, hit.point, ForceMode.Impulse);
     }
     
     private void Punch()

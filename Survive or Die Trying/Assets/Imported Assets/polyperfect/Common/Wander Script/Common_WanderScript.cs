@@ -65,7 +65,7 @@ namespace PolyPerfect
 
         // [SerializeField, Tooltip("How much health this animal has.")]
         private float toughness = 5f;
-
+        
         // [SerializeField, Tooltip("Chance of this animal attacking another animal."), Range(0f, 100f)]
         private float agression = 0f;
         private float originalAgression = 0f;
@@ -937,18 +937,15 @@ namespace PolyPerfect
             target.GetAttacked(this);
 
             float timer = 0f;
-            while (!target.dead)
+            timer += Time.deltaTime;
+
+            if (timer > attackSpeed)
             {
-                timer += Time.deltaTime;
-
-                if (timer > attackSpeed)
-                {
-                    target.TakeDamage(power);
-                    timer = 0f;
-                }
-
-                yield return null;
+                target.TakeDamage(power);
+                timer = 0f;
             }
+
+            yield return null;
 
             if (attackingStates.Length > 0 && !string.IsNullOrEmpty(attackingStates[currentState].animationBool))
             {

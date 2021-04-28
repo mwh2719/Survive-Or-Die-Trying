@@ -20,8 +20,11 @@ public class AnimalBehavior : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        interactScript = GetComponent<ItemPickupable>();
-        interactScript.enabled = false;
+        if (TryGetComponent<ItemPickupable>(out interactScript))
+        {
+            interactScript.enabled = false;
+        }
+        
         //Setting the variables
         wanderScript = this.GetComponent<Animal_WanderScript>();
         animalStats = wanderScript.stats;
@@ -37,11 +40,13 @@ public class AnimalBehavior : MonoBehaviour
         //Checking if the animal is attacking
         if (animalAnimator.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
         {
-            AnimalAttack();
+            this.GetComponent<NavMeshAgent>().enabled = false;
+            attacked = true;
         }
         else if(attacked)
         {
             attacked = false;
+            this.GetComponent<NavMeshAgent>().enabled = true;
         }
 
 
@@ -54,7 +59,6 @@ public class AnimalBehavior : MonoBehaviour
     /// </summary>
     void AnimalAttack()
     {
-        if (attacked) return;
         //Getting a direction vector between the player and animal
         Vector3 AnimaltoPlayer = player.transform.position - this.transform.position;
         //finding the distance between the player and animal
@@ -69,7 +73,6 @@ public class AnimalBehavior : MonoBehaviour
             if (Vector3.Dot(AnimaltoPlayer, this.transform.forward) > 0)
             {
                 player.GetComponent<PlayerHealth>().TakeDamage(Random.Range(.001f, 3f) * (.5f * animalStats.power), Categories.DAMAGE_TYPE.ANIMAL);
-                attacked = true;
             }
         }
         
@@ -81,7 +84,7 @@ public class AnimalBehavior : MonoBehaviour
         if(health <= 0)
         {
             wanderScript.Die();
-            interactScript.enabled = true;
+            if (interactScript) { interactScript.enabled = true; }
         }
     }
 }

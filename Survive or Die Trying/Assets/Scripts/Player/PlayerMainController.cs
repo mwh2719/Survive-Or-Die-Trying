@@ -148,16 +148,25 @@ public class PlayerMainController : MonoBehaviour
     
     void SetFocus(Interactable newFocus)
     {
+        Outline outline;
         if (newFocus != focus)
         {
             if (focus != null)
             {
-                focus.GetComponent<Outline>().enabled = false;
+                outline = focus.GetComponent<Outline>();
+                if (outline)
+                {
+                    outline.enabled = false;
+                }
                 focus.OnDefocused();
             }
 
             focus = newFocus;
-            focus.GetComponent<Outline>().enabled = true;
+            outline = focus.GetComponent<Outline>();
+            if (outline)
+            {
+                outline.enabled = true;
+            }
             newFocus.OnFocused(transform);
         }
     }
@@ -166,7 +175,11 @@ public class PlayerMainController : MonoBehaviour
     {
         if (focus != null)
         {
-            focus.GetComponent<Outline>().enabled = false;
+            Outline outline = focus.GetComponent<Outline>();
+            if (outline)
+            {
+                outline.enabled = false;
+            }
             focus.OnDefocused();
         }
         focus = null;
