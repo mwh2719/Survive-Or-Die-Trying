@@ -3,15 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using FMOD.Studio;
 
 public class GameOver : MonoBehaviour
 {
     // Start is called before the first frame update
     public GameObject deathCanvas;
     public EntityHealth playerHealth;
-    public Button respawnBtn; 
+    public Button respawnBtn;
+
+    [FMODUnity.EventRef]
+    public string deathPath;
+    private EventInstance deathRef;
     void Start()
     {
+        deathRef = FMODUnity.RuntimeManager.CreateInstance(deathPath);
         deathCanvas.SetActive(false);
         respawnBtn.onClick.AddListener(Respawn);
     }

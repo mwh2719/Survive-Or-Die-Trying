@@ -882,6 +882,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animalReach: 3
+  attackPath: event:/SFX/Animals/Bear/Bear Roar
+  idlePath: event:/SFX/Animals/Bear/Bear Growl
 --- !u!1 &1157053009652842273
 GameObject:
   m_ObjectHideFlags: 0

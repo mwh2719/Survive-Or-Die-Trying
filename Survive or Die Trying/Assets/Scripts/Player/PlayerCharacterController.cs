@@ -78,8 +78,7 @@ public class PlayerCharacterController : MonoBehaviour
     public string vomitPath;
     [FMODUnity.EventRef]
     public string attackedPath;
-    [FMODUnity.EventRef]
-    public string deathPath;
+
     [FMODUnity.EventRef]
     public string collectPlantPath;
     [FMODUnity.EventRef]
@@ -96,7 +95,7 @@ public class PlayerCharacterController : MonoBehaviour
     private EventInstance drowningRef;
     private EventInstance vomitRef;
     private EventInstance attackedRef;
-    private EventInstance deathRef;
+
     private EventInstance collectPlantRef;
     private EventInstance drinkRef;
     
@@ -126,7 +125,6 @@ public class PlayerCharacterController : MonoBehaviour
         drowningRef = FMODUnity.RuntimeManager.CreateInstance(drowningPath);
         vomitRef = FMODUnity.RuntimeManager.CreateInstance(vomitPath);
         attackedRef = FMODUnity.RuntimeManager.CreateInstance(attackedPath);
-        deathRef = FMODUnity.RuntimeManager.CreateInstance(deathPath);
         collectPlantRef = FMODUnity.RuntimeManager.CreateInstance(collectPlantPath);
         drinkRef = FMODUnity.RuntimeManager.CreateInstance(drinkPath);
         eatRef = FMODUnity.RuntimeManager.CreateInstance(eatPath);
@@ -520,4 +518,6 @@ public class PlayerCharacterController : MonoBehaviour
 
     public void PlayEatSound() { eatRef.start(); }
     public void PlayDrinkSound() { drinkRef.start(); }
+
+    public void PlayAttackedSound() { attackedRef.start(); }
 }

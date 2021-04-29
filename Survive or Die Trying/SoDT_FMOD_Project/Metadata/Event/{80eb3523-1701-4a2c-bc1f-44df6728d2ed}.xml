@@ -98,6 +98,9 @@
 		<property name="length">
 			<value>19.286575963718821</value>
 		</property>
+		<property name="looping">
+			<value>true</value>
+		</property>
 		<relationship name="modulators">
 			<destination>{10171db0-2faa-4f86-9dfd-cdc2f0da39c1}</destination>
 		</relationship>
@@ -124,7 +127,7 @@
 			<value>0</value>
 		</property>
 		<property name="length">
-			<value>20</value>
+			<value>19.286575963718821</value>
 		</property>
 		<relationship name="timeline">
 			<destination>{dc0ab46b-b752-4dc5-838d-b3638de60ecc}</destination>

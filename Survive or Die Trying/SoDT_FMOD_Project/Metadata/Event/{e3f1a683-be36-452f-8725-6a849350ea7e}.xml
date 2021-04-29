@@ -53,7 +53,7 @@
 			<destination>{6c448e64-4e4f-4cb2-b9b7-8e2b25030b78}</destination>
 		</relationship>
 		<relationship name="output">
-			<destination>{4418cfe5-4a27-4972-affb-bc9da9ae796a}</destination>
+			<destination>{5d0e5bdc-36ce-4827-b248-7c8902161db1}</destination>
 		</relationship>
 	</object>
 	<object class="EventAutomatableProperties" id="{6858bb19-520b-4a20-b606-80ff08a99576}" />
@@ -96,7 +96,7 @@
 			<value>11</value>
 		</property>
 		<property name="polyphony">
-			<value>3</value>
+			<value>4</value>
 		</property>
 		<property name="soundStealing">
 			<value>3</value>
@@ -105,13 +105,10 @@
 			<value>10</value>
 		</property>
 		<property name="maximumTimeBetweenSounds">
-			<value>30000</value>
-		</property>
-		<property name="spawnRate">
-			<value>50</value>
+			<value>9000</value>
 		</property>
 		<property name="maximumScatterDistance">
-			<value>400</value>
+			<value>500</value>
 		</property>
 		<property name="pitchRandomization">
 			<value>1.20000005</value>
@@ -142,7 +139,7 @@
 			<value>0</value>
 		</property>
 		<property name="length">
-			<value>12</value>
+			<value>11</value>
 		</property>
 		<relationship name="timeline">
 			<destination>{3464337c-0c8b-462e-8788-b5f851904e1f}</destination>
