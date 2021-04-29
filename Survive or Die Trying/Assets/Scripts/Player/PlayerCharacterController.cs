@@ -179,8 +179,8 @@ public class PlayerCharacterController : MonoBehaviour
 
     private void PlayLandingSound()
     {
-        fallWithoutDamageRef.setParameterByName("Step Material", this.GetComponent<AmbienceBehavior>().ConvertRegionToInt());
-        fallWithoutDamageRef.start();
+        /*fallWithoutDamageRef.setParameterByName("Step Material", this.GetComponent<AmbienceBehavior>().ConvertRegionToInt());
+        fallWithoutDamageRef.start();*/
     }
 
     public bool getIsWalking()
@@ -461,8 +461,8 @@ public class PlayerCharacterController : MonoBehaviour
             fallWithDamageRef.setParameterByName("Step Material", this.GetComponent<AmbienceBehavior>().ConvertRegionToInt());
             fallWithDamageRef.start();
         }
-        fallWithDamageRef.setParameterByName("Step Material", this.GetComponent<AmbienceBehavior>().ConvertRegionToInt());
-        fallWithoutDamageRef.start();
+        /*fallWithDamageRef.setParameterByName("Step Material", this.GetComponent<AmbienceBehavior>().ConvertRegionToInt());
+        fallWithoutDamageRef.start();*/
         Rigidbody body = hit.collider.attachedRigidbody;
 
         // detects if player should be sliding and will create the sliding vector if so.
