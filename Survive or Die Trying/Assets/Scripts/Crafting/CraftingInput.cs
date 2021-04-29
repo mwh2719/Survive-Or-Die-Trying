@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using FMOD.Studio;
 
 public class CraftingInput : MonoBehaviour
 {
@@ -12,7 +13,8 @@ public class CraftingInput : MonoBehaviour
     public GameObject craftOutputPanel;
     public InventorySlot craftOutputSlot;
     PlayerInventory playerInventory;
-    
+
+
     void Start()
     {
         playerInventory = PlayerInventory.instance;

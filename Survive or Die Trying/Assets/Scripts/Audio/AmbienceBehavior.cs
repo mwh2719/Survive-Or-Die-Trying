@@ -33,26 +33,24 @@ public class AmbienceBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(currentRegion == Region.Beach)
-        {
-            beachSanpRef.start();
 
-            //add code to change material step type here
-            playerStepRef.setParameterByName("Step Material", 2);
-        }
-        else if(currentRegion == Region.Forest)
-        {
-            forestSnapRef.start();
+        playerStepRef.setParameterByName("Step Material", ConvertRegionToInt());
 
-            //add code to change material step type here
-            playerStepRef.setParameterByName("Step Material", 1);
-        }
-        else if(currentRegion == Region.Stone)
+        switch (currentRegion)
         {
-
-            //add code to change material step type here
-            playerStepRef.setParameterByName("Step Material", 0);
+            case Region.Beach:
+                beachSanpRef.start();
+                break;
+            case Region.Forest:
+                forestSnapRef.start();
+                break;
+            case Region.Stone:
+                break;
+            default:
+                forestSnapRef.start();
+                break;
         }
+
     }
 
     public Region CurrentRegion
@@ -60,4 +58,21 @@ public class AmbienceBehavior : MonoBehaviour
         get { return currentRegion; }
         set { currentRegion = value; }
     }
+
+    public int ConvertRegionToInt()
+    {
+        switch (currentRegion)
+        {
+            case Region.Beach:
+                return 2;
+            case Region.Forest:
+                return 1;
+            case Region.Stone:
+                return 0;
+            default:
+                return 1;
+        }
+        
+    }
+
 }

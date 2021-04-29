@@ -127,7 +127,7 @@ public class PlayerMainController : MonoBehaviour
 
 
         //Environmental Drinking test
-        if (Input.GetButtonDown("EnvironmentIteract"))
+        if (Input.GetButtonDown("Use"))
         {
             bool hitWaterLayer = Physics.Raycast(ray, out hit, playerReach, waterLayer);
             if (hitWaterLayer)
@@ -138,6 +138,7 @@ public class PlayerMainController : MonoBehaviour
                     DrinkableEnvironment drinkableScript = obj.GetComponent<DrinkableEnvironment>();
                     if (drinkableScript)
                     {
+                        this.GetComponent<PlayerCharacterController>().PlayDrinkSound();
                         drinkableScript.Drink(gameObject);
                     }
                 }

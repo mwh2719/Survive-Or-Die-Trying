@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using FMOD.Studio;
 
 // Will make this show up in the asset context menu so people can quickly make more food instances.
 [CreateAssetMenu(fileName = "New Food", menuName = "Inventory/Food")]
@@ -12,7 +13,7 @@ public class EdibleItem : Item
     public float thirstRestoration;
     [Header("Set to 0 to do instant effects")]
     public float longTermEffectDuration;
-
+    
     /// <summary>
     /// Foods can always be eaten.
     /// </summary>
@@ -30,6 +31,7 @@ public class EdibleItem : Item
     /// <returns>Whether the food was truly consumed</returns>
     public override bool Use(GameObject user)
     {
+        user.GetComponent<PlayerCharacterController>().PlayEatSound();
         // Checks if it is usable by entity
         PlayerMainController userStats = user.GetComponent<PlayerMainController>();
         EntityHealth playerHealth = user.GetComponent<EntityHealth>();

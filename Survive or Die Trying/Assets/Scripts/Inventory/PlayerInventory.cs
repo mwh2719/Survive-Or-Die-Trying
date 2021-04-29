@@ -37,6 +37,7 @@ public class PlayerInventory : MonoBehaviour
     public int space = 20;
     public List<Item> items = new List<Item>();
 
+
     /// <summary>
     /// Adds the item to the inventory if there is enough room.
     /// Will trigger onItemChangedCallback event.

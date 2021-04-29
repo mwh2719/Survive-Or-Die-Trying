@@ -66,8 +66,40 @@ public class PlayerCharacterController : MonoBehaviour
     public string stepPath;
     [FMODUnity.EventRef]
     public string jumpPath;
+    [FMODUnity.EventRef]
+    public string swimPath;
+    [FMODUnity.EventRef]
+    public string fallWithoutDamagePath;
+    [FMODUnity.EventRef]
+    public string fallWithDamagePath;
+    [FMODUnity.EventRef]
+    public string drowningPath;
+    [FMODUnity.EventRef]
+    public string vomitPath;
+    [FMODUnity.EventRef]
+    public string attackedPath;
+    [FMODUnity.EventRef]
+    public string deathPath;
+    [FMODUnity.EventRef]
+    public string collectPlantPath;
+    [FMODUnity.EventRef]
+    public string drinkPath;
+    [FMODUnity.EventRef]
+    public string eatPath;
+    private EventInstance eatRef;
+
     private EventInstance stepRef;
     private EventInstance jumpRef;
+    private EventInstance swimRef;
+    private EventInstance fallWithoutDamageRef;
+    private EventInstance fallWithDamageRef;
+    private EventInstance drowningRef;
+    private EventInstance vomitRef;
+    private EventInstance attackedRef;
+    private EventInstance deathRef;
+    private EventInstance collectPlantRef;
+    private EventInstance drinkRef;
+    
 
 
     // Use this for initialization
@@ -88,6 +120,16 @@ public class PlayerCharacterController : MonoBehaviour
         health = GetComponent<PlayerHealth>();
         stepRef = FMODUnity.RuntimeManager.CreateInstance(stepPath);
         jumpRef = FMODUnity.RuntimeManager.CreateInstance(jumpPath);
+        swimRef = FMODUnity.RuntimeManager.CreateInstance(swimPath);
+        fallWithoutDamageRef = FMODUnity.RuntimeManager.CreateInstance(fallWithoutDamagePath);
+        fallWithDamageRef = FMODUnity.RuntimeManager.CreateInstance(fallWithDamagePath);
+        drowningRef = FMODUnity.RuntimeManager.CreateInstance(drowningPath);
+        vomitRef = FMODUnity.RuntimeManager.CreateInstance(vomitPath);
+        attackedRef = FMODUnity.RuntimeManager.CreateInstance(attackedPath);
+        deathRef = FMODUnity.RuntimeManager.CreateInstance(deathPath);
+        collectPlantRef = FMODUnity.RuntimeManager.CreateInstance(collectPlantPath);
+        drinkRef = FMODUnity.RuntimeManager.CreateInstance(drinkPath);
+        eatRef = FMODUnity.RuntimeManager.CreateInstance(eatPath);
     }
 
     public void SetPositionAndRotation(Vector3 newPosition, Quaternion newRotation)
@@ -139,7 +181,8 @@ public class PlayerCharacterController : MonoBehaviour
 
     private void PlayLandingSound()
     {
-        
+        fallWithoutDamageRef.setParameterByName("Step Material", this.GetComponent<AmbienceBehavior>().ConvertRegionToInt());
+        fallWithoutDamageRef.start();
     }
 
     public bool getIsWalking()
@@ -227,6 +270,7 @@ public class PlayerCharacterController : MonoBehaviour
         // move slower when in water
         if (inWater)
         {
+            stepRef.setParameterByName("Step Material", 3);
             //stop sliding/jumping when in water
             isSliding = false;
             m_Jump = false;
@@ -332,7 +376,7 @@ public class PlayerCharacterController : MonoBehaviour
 
     private void PlayFootStepAudio()
     {
-        if (!isTouchingGround)
+        if (!isTouchingGround || isSwimming)
         {
             return;
         }
@@ -416,8 +460,11 @@ public class PlayerCharacterController : MonoBehaviour
         if (fallTimer > 0.35f && collisionAngle < 80f && previousYSpeed < -fallingSpeedForFallDamage)
         {
             health.TakeDamage(Mathf.Pow(Mathf.Abs(previousYSpeed), 2f) / fallingSpeedForFallDamage, Categories.DAMAGE_TYPE.KINETIC);
+            fallWithDamageRef.setParameterByName("Step Material", this.GetComponent<AmbienceBehavior>().ConvertRegionToInt());
+            fallWithDamageRef.start();
         }
-        
+        fallWithDamageRef.setParameterByName("Step Material", this.GetComponent<AmbienceBehavior>().ConvertRegionToInt());
+        fallWithoutDamageRef.start();
         Rigidbody body = hit.collider.attachedRigidbody;
 
         // detects if player should be sliding and will create the sliding vector if so.
@@ -470,4 +517,7 @@ public class PlayerCharacterController : MonoBehaviour
     {
         get { return stepRef; }
     }
+
+    public void PlayEatSound() { eatRef.start(); }
+    public void PlayDrinkSound() { drinkRef.start(); }
 }
