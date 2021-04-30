@@ -15,6 +15,7 @@ TagManager:
   - Stone Zone
   - Beach Zone
   - Forest Zone
+  - Plant Item
   layers:
   - Default
   - TransparentFX

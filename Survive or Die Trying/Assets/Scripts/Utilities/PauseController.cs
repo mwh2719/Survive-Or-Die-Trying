@@ -2,14 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.Characters.FirstPerson;
+using FMODUnity;
+using FMOD.Studio;
 
 public class PauseController : MonoBehaviour
 {
+
+    private static Bus ambienceBus;
     public static bool inGui = false;
     public static bool gameIsPaused = false;
     public static bool gameOver = false;
     public static PlayerCharacterController playerCharacterController;
 
+
+    private void Start()
+    {
+        ambienceBus = RuntimeManager.GetBus("bus:/Ambience");
+    }
     /// <summary>
     /// Grabs the player at start to be able to disable player controls when paused.
     /// </summary>
@@ -60,6 +69,7 @@ public class PauseController : MonoBehaviour
         // Pauses the game by making all time based stuff stop
         if (gameIsPaused)
         {
+            ambienceBus.setPaused(true);
             Time.timeScale = 0f;
             AudioListener.pause = true;
             playerCharacterController.enabled = false;
@@ -68,6 +78,7 @@ public class PauseController : MonoBehaviour
         }
         else
         {
+            ambienceBus.setPaused(false);
             Time.timeScale = 1;
             AudioListener.pause = false;
             playerCharacterController.enabled = true;

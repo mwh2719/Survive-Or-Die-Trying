@@ -2,8 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class PauseAudio : MonoBehaviour
 {
+    
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -12,6 +16,16 @@ public class PauseAudio : MonoBehaviour
 
     // Update is called once per frame
     void Update()
+    {
+        
+    }
+
+    private void OnEnable()
+    {
+        
+    }
+
+    private void OnDisable()
     {
         
     }

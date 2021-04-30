@@ -492,4 +492,6 @@ public class PlayerCharacterController : MonoBehaviour
     public void PlayDrinkSound() { drinkRef.start(); }
 
     public void PlayAttackedSound() { attackedRef.start(); }
+
+    public void PlayCollectPlantSound() { collectPlantRef.start(); }
 }

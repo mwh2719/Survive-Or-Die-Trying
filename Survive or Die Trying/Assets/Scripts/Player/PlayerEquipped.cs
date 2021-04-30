@@ -45,6 +45,7 @@ public class PlayerEquipped : MonoBehaviour
     {
         if (Input.GetButtonDown("Action"))
         {
+            
             //Add code here to see if the player is holding an item
             if (equippedItem)
             {
@@ -53,6 +54,7 @@ public class PlayerEquipped : MonoBehaviour
             else
             {
                 Punch();
+
             }
         }
         else if (Input.GetButtonDown("PutAway"))

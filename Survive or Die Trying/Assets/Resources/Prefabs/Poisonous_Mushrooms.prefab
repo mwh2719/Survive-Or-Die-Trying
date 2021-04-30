@@ -114,7 +114,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   radius: 3
-  interactionTransform: {fileID: 3512446353382640091}
   item: {fileID: 11400000, guid: 9d9d26907d449b049800dc45580d0835, type: 2}
 --- !u!64 &1863389579195207448
 MeshCollider:

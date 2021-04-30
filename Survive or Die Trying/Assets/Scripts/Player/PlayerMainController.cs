@@ -118,6 +118,10 @@ public class PlayerMainController : MonoBehaviour
             if (Input.GetButtonDown("Use"))
             {
                 objInteractable.Interact();
+                if(objInteractable.gameObject.tag == "Plant Item")
+                {
+                    this.GetComponent<PlayerCharacterController>().PlayCollectPlantSound();
+                }
             }
         }
         else
