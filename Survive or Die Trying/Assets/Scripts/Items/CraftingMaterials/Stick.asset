@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Stick
   m_EditorClassIdentifier: 
   name: Stick
-  physicalPrefab: {fileID: 1325243728563266, guid: 720c6591b996f3b45b844519425924b9,
+  physicalPrefab: {fileID: 4077695523794773072, guid: 94a23b9c599e6b344951fbac96a55de4,
     type: 3}
   type: 2
   image: {fileID: 21300000, guid: 999614e80c032564dbca9b5c3786b903, type: 3}

@@ -26,7 +26,7 @@ public class CraftingInput : MonoBehaviour
     /// <param name="addedSlot"> Slot moved into craft area </param>
     public void UpdateCraftItem(InventorySlot addedSlot)
     {
-        if(addedSlot != null)
+        if(addedSlot != null && !selectedSlots.Contains(addedSlot))
         {
             selectedSlots.Add(addedSlot);
         }

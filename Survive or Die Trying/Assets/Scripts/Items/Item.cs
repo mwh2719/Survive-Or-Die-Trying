@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// Will make this show up in the asset context menu so people can quickly make more food instances.
+// Will make this show up in the asset context menu so people can quickly make more instances.
 [CreateAssetMenu(fileName = "New Item", menuName = "Inventory/Item")]
 public class Item : ScriptableObject
 {
@@ -54,5 +54,13 @@ public class Item : ScriptableObject
     {
         // Do nothing
         return false;
+    }
+
+    /// <summary>
+    /// Use the item in the world. Only for equipable items
+    /// </summary>
+    /// <param name="user">The user</param>
+    public virtual void InWorldUse(GameObject user)
+    {
     }
 }

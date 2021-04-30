@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Stone
   m_EditorClassIdentifier: 
   name: Stone
-  physicalPrefab: {fileID: 1111534484382968, guid: 58460dec29312364795e00549bdfc146,
+  physicalPrefab: {fileID: 7000839407533805559, guid: 6fc856e67a8ba05439e0ed057c61a272,
     type: 3}
   type: 2
   image: {fileID: 21300000, guid: d9bca4e2f4e8ff54392192c7a67927bb, type: 3}

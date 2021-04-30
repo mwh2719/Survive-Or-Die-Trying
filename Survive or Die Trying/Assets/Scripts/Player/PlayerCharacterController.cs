@@ -25,9 +25,6 @@ public class PlayerCharacterController : MonoBehaviour
 
     [SerializeField] private float m_StepInterval;
 
-    [SerializeField] private float playerAttackRange;
-    [SerializeField] private float punchDamage;
-
     private Camera m_Camera;
     private bool m_Jump;
     private float m_YRotation;
@@ -61,6 +58,9 @@ public class PlayerCharacterController : MonoBehaviour
     private float fallTimer = 0;
 
     public Animator playerAnim;     //Variable to hol refrence to player animator
+
+    [SerializeField]
+    private GameObject head;
 
     [FMODUnity.EventRef]
     public string stepPath;
@@ -145,23 +145,8 @@ public class PlayerCharacterController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        m_Camera.transform.localPosition = new Vector3(m_Camera.transform.localPosition.x, m_Camera.transform.localPosition.y, .18f);//Fixing camera moving back inside player head
 
         playerAnim.SetInteger("Health", (int)health.CurrentHealth);
-
-        if (Input.GetButtonDown("Action"))
-        {
-            //Add code here to see if the player is holding an item
-            if (0==1)
-            {
-
-            }
-            else
-            {
-                Punch();
-            }
-            
-        }
 
         RotateView();
         // the jump state needs to read here to make sure it is not missed
@@ -175,6 +160,7 @@ public class PlayerCharacterController : MonoBehaviour
             StartCoroutine(m_JumpBob.DoBobCycle());
             PlayLandingSound();
         }
+        m_Camera.transform.position = head.transform.position;
     }
 
     private void PlayLandingSound()
@@ -331,7 +317,7 @@ public class PlayerCharacterController : MonoBehaviour
                 playerMainController.CurrentHunger += -0.1f;
             }
         }
-        Debug.Log(m_MoveDir + " isSliding: " + isSliding + " isGrounded: " + isTouchingGround);
+        //Debug.Log(m_MoveDir + " isSliding: " + isSliding + " isGrounded: " + isTouchingGround);
         m_CollisionFlags = m_CharacterController.Move(m_MoveDir * Time.fixedDeltaTime);
 
         // reset camera bobbing when exiting water
@@ -494,20 +480,6 @@ public class PlayerCharacterController : MonoBehaviour
             isSliding = false;
             slidingTime = 0;
             slidingDirection = Vector3.zero;
-        }
-    }
-    
-    private void Punch()
-    {
-        playerAnim.SetTrigger("Punch");
-        RaycastHit hit;
-        AnimalBehavior animalHit;
-        if (Physics.Raycast(m_Camera.transform.position, m_Camera.transform.forward, out hit, playerAttackRange))
-        {
-            if (hit.transform.TryGetComponent<AnimalBehavior>(out animalHit))
-            {
-                animalHit.TakeDamage(punchDamage);
-            }
         }
     }
 
