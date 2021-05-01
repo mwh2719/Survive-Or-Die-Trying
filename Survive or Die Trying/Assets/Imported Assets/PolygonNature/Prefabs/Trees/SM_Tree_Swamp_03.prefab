@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 33871384450231310}
   - component: {fileID: 23612696977976112}
   - component: {fileID: 64457773127422528}
+  - component: {fileID: 8282151608877741470}
   m_Layer: 11
   m_Name: SM_Tree_Swamp_03
   m_TagString: Untagged
@@ -94,3 +95,16 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: c04597d6c156c584db37b81904c592ba, type: 3}
+--- !u!114 &8282151608877741470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1915442609382986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c2a6477cfe4e794cbf5c0cc9dfe181b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  log: {fileID: 3110939564921013102, guid: d8b07fc7e62d95745b40fdaab1b1ee8e, type: 3}

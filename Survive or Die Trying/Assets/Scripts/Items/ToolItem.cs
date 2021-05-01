@@ -6,7 +6,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Tool", menuName = "Inventory/Tool")]
 public class ToolItem : Item
 {
-    [SerializeField] private float attackRange;
+    [SerializeField] protected float attackRange;
     [SerializeField] private float hitDamage;
 
     /// <summary>

@@ -90,6 +90,7 @@ GameObject:
   - component: {fileID: 4210439320850706}
   - component: {fileID: 205034402677776096}
   - component: {fileID: 136271319220045978}
+  - component: {fileID: 562921736574146488}
   m_Layer: 11
   m_Name: SM_Tree_Birch_Dead_01
   m_TagString: Untagged
@@ -150,6 +151,19 @@ CapsuleCollider:
   m_Height: 3.907669
   m_Direction: 1
   m_Center: {x: -0.010327309, y: 1.6459765, z: 0}
+--- !u!114 &562921736574146488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1832163050889860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c2a6477cfe4e794cbf5c0cc9dfe181b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  log: {fileID: 3110939564921013102, guid: d8b07fc7e62d95745b40fdaab1b1ee8e, type: 3}
 --- !u!1 &1880860532132952
 GameObject:
   m_ObjectHideFlags: 0

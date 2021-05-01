@@ -60,10 +60,11 @@ public class TerrianBehavior : MonoBehaviour
             Quaternion rotation = new Quaternion();
             rotation.eulerAngles = new Vector3(0, tree.rotation, 0);
 
+
+
             //Making the tree game object
             GameObject treeObject = Instantiate(treeList[index], location,rotation);
             treeObject.transform.localScale = new Vector3(width, height, width);
-            
         }
     }
 
