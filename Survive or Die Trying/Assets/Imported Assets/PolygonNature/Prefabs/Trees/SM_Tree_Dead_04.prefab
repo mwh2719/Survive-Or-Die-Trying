@@ -228,4 +228,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2a6477cfe4e794cbf5c0cc9dfe181b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  treeFallPath: event:/SFX/Environment/Tree Falling
   log: {fileID: 3110939564921013102, guid: d8b07fc7e62d95745b40fdaab1b1ee8e, type: 3}

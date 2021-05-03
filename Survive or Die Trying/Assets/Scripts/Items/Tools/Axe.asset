@@ -19,3 +19,4 @@ MonoBehaviour:
   image: {fileID: 21300000, guid: 97e9533e9ac68d843992d7ad74a05b33, type: 3}
   attackRange: 3
   hitDamage: 7
+  axeSwingPath: event:/SFX/Player/Tools/Axe Swing

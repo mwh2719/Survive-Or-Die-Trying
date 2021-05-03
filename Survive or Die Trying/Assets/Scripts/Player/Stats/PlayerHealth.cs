@@ -22,7 +22,10 @@ public class PlayerHealth : EntityHealth
         //Adding chance of infection from animal bites
         if(type == DAMAGE_TYPE.ANIMAL)
         {
-            this.GetComponent<PlayerCharacterController>().PlayAttackedSound();
+            if (CurrentHealth - damage > 0)
+            {
+                this.GetComponent<PlayerCharacterController>().PlayAttackedSound();
+            }
             if (Random.Range(0,100) <= 25)
             {
                 //Adding infection damage

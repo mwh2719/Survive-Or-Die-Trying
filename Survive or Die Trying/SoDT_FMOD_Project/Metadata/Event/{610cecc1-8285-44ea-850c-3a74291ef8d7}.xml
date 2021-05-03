@@ -100,7 +100,7 @@
 	<object class="MixerBusPanner" id="{e53216f3-a1a7-414a-9180-d671bdb9dc17}" />
 	<object class="MultiSound" id="{59c67004-448c-4aa6-9dd6-f675ba054a82}">
 		<property name="length">
-			<value>0.57999999999999996</value>
+			<value>0.80000000000000004</value>
 		</property>
 		<property name="name">
 			<value>Puddle</value>
@@ -119,10 +119,10 @@
 	</object>
 	<object class="MultiSound" id="{4ff277f7-72d5-4701-bd1d-92db54c38ee8}">
 		<property name="start">
-			<value>0.32000000000000001</value>
+			<value>0.20000000000000001</value>
 		</property>
 		<property name="length">
-			<value>0.6747590160369874</value>
+			<value>0.80000000000000004</value>
 		</property>
 		<property name="name">
 			<value>Wading</value>
@@ -249,7 +249,7 @@
 	<object class="MixerBusFader" id="{d5560c8d-c156-434d-89e8-77057f9190fc}" />
 	<object class="AutomationPoint" id="{8f958205-287d-4669-95a5-dd0da26ab68f}">
 		<property name="position">
-			<value>0.32000000000000001</value>
+			<value>0.20000000000000001</value>
 		</property>
 		<property name="value">
 			<value>1</value>
@@ -260,7 +260,7 @@
 	</object>
 	<object class="AutomationPoint" id="{c7cc69b5-e934-4ce1-a6b1-686093d3954b}">
 		<property name="position">
-			<value>0.57999999999999996</value>
+			<value>0.80000000000000004</value>
 		</property>
 		<property name="value">
 			<value>0</value>
@@ -268,7 +268,7 @@
 	</object>
 	<object class="AutomationPoint" id="{898778fd-7ac1-4d01-a657-efa362a4a660}">
 		<property name="position">
-			<value>0.32000000000000001</value>
+			<value>0.20000000000000001</value>
 		</property>
 		<property name="value">
 			<value>0</value>
@@ -279,7 +279,7 @@
 	</object>
 	<object class="AutomationPoint" id="{d9bd2502-59ef-4f0c-99df-c6d12681a76f}">
 		<property name="position">
-			<value>0.57999999999999996</value>
+			<value>0.80000000000000004</value>
 		</property>
 		<property name="value">
 			<value>1</value>

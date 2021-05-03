@@ -17,6 +17,9 @@ public class PlayerMainController : MonoBehaviour
     private Vector3 spawnPosition;
     private Interactable focus;
 
+    private float hungerTimer = 0f;
+    private float thirstTimer = 0f;
+
 
     [SerializeField] private float currentHunger;
     public float maxHunger;
@@ -98,9 +101,23 @@ public class PlayerMainController : MonoBehaviour
             playerHealth.TakeDamage(0.001f, Categories.DAMAGE_TYPE.HUNGER);
         }
 
+        if(CurrentHunger <= 30 && hungerTimer <= 0)
+        {
+            fpsController.PlayHungerDialog();
+
+            hungerTimer = Random.Range(60, (5 * 60));
+        }
+
         if (currentThirst == 0)
         {
             playerHealth.TakeDamage(0.001f, Categories.DAMAGE_TYPE.THIRST);
+        }
+
+        if (CurrentThirst <= 30 && thirstTimer <= 0)
+        {
+            fpsController.PlayThirstDialog();
+
+            thirstTimer = Random.Range(60, (5 * 60));
         }
 
 
@@ -150,7 +167,19 @@ public class PlayerMainController : MonoBehaviour
         }
     }
 
-    
+    private void FixedUpdate()
+    {
+        if(hungerTimer > 0)
+        {
+            hungerTimer -= Time.deltaTime;
+        }
+        if(thirstTimer > 0)
+        {
+            thirstTimer -= Time.deltaTime;
+        }
+    }
+
+
     void SetFocus(Interactable newFocus)
     {
         Outline outline;

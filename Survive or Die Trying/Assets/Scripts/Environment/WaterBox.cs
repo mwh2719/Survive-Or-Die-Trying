@@ -33,12 +33,22 @@ public class WaterBox : MonoBehaviour
     {
         if (collisionInfo.gameObject.tag.Equals("Player"))
         {
+            
             if (waterbox.bounds.Contains(playerCamera.transform.position - new Vector3(0, 0.45f, 0)))
             {
                 player.isSwimming = true;
             }
             else
             {
+                if(waterbox.bounds.max.y - player.GetComponent<Collider>().bounds.min.y > 1)
+                {
+                    player.WaterDepth = 1;
+                }
+                else
+                {
+                    player.WaterDepth = waterbox.bounds.max.y - player.GetComponent<Collider>().bounds.min.y;
+                }
+                
                 player.isSwimming = false;
             }
         }

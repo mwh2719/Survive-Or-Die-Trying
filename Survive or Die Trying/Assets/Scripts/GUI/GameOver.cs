@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using FMOD.Studio;
+using FMODUnity;
 
 public class GameOver : MonoBehaviour
 {
@@ -15,11 +16,18 @@ public class GameOver : MonoBehaviour
     [FMODUnity.EventRef]
     public string deathPath;
     private EventInstance deathRef;
+    private static Bus playerMovementBus;
+    private static Bus playerDamageBus;
+
+    private bool playDeathAudio = true;
     void Start()
     {
         deathRef = FMODUnity.RuntimeManager.CreateInstance(deathPath);
         deathCanvas.SetActive(false);
         respawnBtn.onClick.AddListener(Respawn);
+
+        playerMovementBus = RuntimeManager.GetBus("bus:/SFX/Player/Movement");
+        playerDamageBus = RuntimeManager.GetBus("bus:/SFX/Player/Damage");
     }
 
     // Update is called once per frame
@@ -29,12 +37,23 @@ public class GameOver : MonoBehaviour
         {
             PlayerDeath();
         }
+        else
+        {
+            playDeathAudio = true;
+        }
     }
     /// <summary>
     /// Load death screen
     /// </summary>
     public void PlayerDeath()
     {
+        if (playDeathAudio)
+        {
+            deathRef.start();
+            playerMovementBus.stopAllEvents(FMOD.Studio.STOP_MODE.IMMEDIATE);
+            playerDamageBus.stopAllEvents(FMOD.Studio.STOP_MODE.IMMEDIATE);
+            playDeathAudio = false;
+        }
         deathCanvas.SetActive(true);
         PauseController.ForcePauseState(deathCanvas.activeSelf, deathCanvas.activeSelf);
         PauseController.gameOver = true;

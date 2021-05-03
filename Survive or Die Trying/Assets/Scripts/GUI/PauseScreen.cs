@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using FMOD.Studio;
 
 public class PauseScreen : MonoBehaviour
 {
@@ -10,11 +11,22 @@ public class PauseScreen : MonoBehaviour
     public GameObject pauseMenu;
     public Button resumeBtn;
     public Button saveQuitBtn;
+
+    [FMODUnity.EventRef]
+    public string buttonClickPath;
+    [FMODUnity.EventRef]
+    public string backButtonClickPath;
+
+    private EventInstance buttonClickRef;
+    private EventInstance backButtonClickRef;
     void Start()
     {
         pauseMenu.SetActive(false);
         resumeBtn.onClick.AddListener(ResumeGame);
         saveQuitBtn.onClick.AddListener(QuitGame);
+
+        buttonClickRef = FMODUnity.RuntimeManager.CreateInstance(buttonClickPath);
+        backButtonClickRef = FMODUnity.RuntimeManager.CreateInstance(backButtonClickPath);
     }
 
     /// <summary>
@@ -48,5 +60,17 @@ public class PauseScreen : MonoBehaviour
     void QuitGame()
     {
         SceneManager.LoadScene("MainMenu");
+    }
+
+    public void PlayButtonAudio(GameObject button)
+    {
+        if (button.tag == "AffirmativeButton")
+        {
+            buttonClickRef.start();
+        }
+        else if (button.tag == "BackButton")
+        {
+            backButtonClickRef.start();
+        }
     }
 }

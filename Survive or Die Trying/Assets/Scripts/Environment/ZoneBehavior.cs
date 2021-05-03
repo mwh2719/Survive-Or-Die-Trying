@@ -20,7 +20,6 @@ public class ZoneBehavior : MonoBehaviour
     {
         if (other.gameObject.tag != "Player") return;
 
-        Debug.Log(this.transform.parent.tag);
         switch (this.transform.parent.tag)
         {
             case "Beach Zone":
@@ -35,8 +34,4 @@ public class ZoneBehavior : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        
-    }
 }

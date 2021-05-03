@@ -27,6 +27,8 @@ public class AnimalBehavior : MonoBehaviour
     private EventInstance attackRef;
     private EventInstance idleRef;
 
+    private bool callEveryOther = true;
+
 
     // Start is called before the first frame update
     void Start()
@@ -108,8 +110,9 @@ public class AnimalBehavior : MonoBehaviour
     }
 
     public void PlayIdleSound() 
-    { 
-        idleRef.start(); 
+    {
+        if (callEveryOther) { idleRef.start(); }
+        callEveryOther = !callEveryOther;
     }
     public void PlayAttackSound()
     {

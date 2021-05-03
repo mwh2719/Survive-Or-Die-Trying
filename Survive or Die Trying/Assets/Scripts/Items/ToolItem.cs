@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using FMOD.Studio;
 
 // Will make this show up in the asset context menu so people can quickly make more instances.
 [CreateAssetMenu(fileName = "New Tool", menuName = "Inventory/Tool")]
@@ -8,6 +9,12 @@ public class ToolItem : Item
 {
     [SerializeField] protected float attackRange;
     [SerializeField] private float hitDamage;
+
+    [FMODUnity.EventRef]
+    public string stabPath;
+
+
+    private EventInstance stabRef;
 
     /// <summary>
     /// Tools can be equipped.
@@ -35,6 +42,12 @@ public class ToolItem : Item
     /// <param name="user">The user</param>
     public override void InWorldUse(GameObject user)
     {
+
+        if(stabPath.Length > 0)
+        {
+            stabRef = FMODUnity.RuntimeManager.CreateInstance(stabPath);
+            stabRef.start();
+        }
         user.GetComponent<PlayerCharacterController>().playerAnim.SetTrigger("Punch");
 
         RaycastHit hit;

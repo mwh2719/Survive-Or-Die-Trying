@@ -49,8 +49,10 @@ public class PlayerCharacterController : MonoBehaviour
     private float slidingTime = 0;
     public bool inWater = false;
     public bool isSwimming = false;
+    private bool wasSwimming = false;
     private float swimmingTime = 0;
     public float timeBeforeDrowning = 10;
+    private bool wasDrowning;
     private float cameraOffset = 0;
     public float cameraBobbingStrength = 0;
     public float fallingSpeedForFallDamage = 5;
@@ -85,6 +87,10 @@ public class PlayerCharacterController : MonoBehaviour
     public string drinkPath;
     [FMODUnity.EventRef]
     public string eatPath;
+    [FMODUnity.EventRef]
+    public string hungerPath;
+    [FMODUnity.EventRef]
+    public string thirstPath;
     private EventInstance eatRef;
 
     private EventInstance stepRef;
@@ -98,7 +104,10 @@ public class PlayerCharacterController : MonoBehaviour
 
     private EventInstance collectPlantRef;
     private EventInstance drinkRef;
-    
+
+    private EventInstance hungerRef;
+    private EventInstance thirstRef;
+
 
 
     // Use this for initialization
@@ -128,6 +137,8 @@ public class PlayerCharacterController : MonoBehaviour
         collectPlantRef = FMODUnity.RuntimeManager.CreateInstance(collectPlantPath);
         drinkRef = FMODUnity.RuntimeManager.CreateInstance(drinkPath);
         eatRef = FMODUnity.RuntimeManager.CreateInstance(eatPath);
+        hungerRef = FMODUnity.RuntimeManager.CreateInstance(hungerPath);
+        thirstRef = FMODUnity.RuntimeManager.CreateInstance(thirstPath);
     }
 
     public void SetPositionAndRotation(Vector3 newPosition, Quaternion newRotation)
@@ -145,7 +156,6 @@ public class PlayerCharacterController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-
         playerAnim.SetInteger("Health", (int)health.CurrentHealth);
 
         RotateView();
@@ -161,6 +171,7 @@ public class PlayerCharacterController : MonoBehaviour
             PlayLandingSound();
         }
         m_Camera.transform.position = head.transform.position;
+
     }
 
     private void PlayLandingSound()
@@ -176,6 +187,7 @@ public class PlayerCharacterController : MonoBehaviour
 
     private void FixedUpdate()
     {
+
         // use isTouchingGround instead of m_CharacterController.isGrounded as that is bugged with upward movement while touching ground.
         RaycastHit hitInfo;
         Physics.SphereCast(transform.position, m_CharacterController.radius + 0.0000001f, Vector3.down, out hitInfo,
@@ -254,7 +266,6 @@ public class PlayerCharacterController : MonoBehaviour
         // move slower when in water
         if (inWater)
         {
-            stepRef.setParameterByName("Step Material", 3);
             //stop sliding/jumping when in water
             isSliding = false;
             m_Jump = false;
@@ -275,6 +286,11 @@ public class PlayerCharacterController : MonoBehaviour
             // we are now in swimming mode. Sink slowly...
             if (isSwimming)
             {
+                if (!wasSwimming)
+                {
+                    swimRef.start();
+                }
+
                 // slower gravity pull
                 m_MoveDir += (Physics.gravity * 0.075f * Time.fixedDeltaTime);
 
@@ -290,6 +306,10 @@ public class PlayerCharacterController : MonoBehaviour
             // sink into water so we can touch bottom and aren't in swimming mode yet
             else
             {
+                if (wasSwimming)
+                {
+                    swimRef.stop(STOP_MODE.ALLOWFADEOUT);
+                }
                 swimmingTime = 0;
                 m_MoveDir += Physics.gravity * m_GravityMultiplier * 0.75f * Time.fixedDeltaTime;
             }
@@ -297,7 +317,17 @@ public class PlayerCharacterController : MonoBehaviour
             // Drown if player is swimming too long
             if (swimmingTime >= timeBeforeDrowning)
             {
+                if (!wasDrowning)
+                {
+                    drowningRef.start();
+                }
                 health.TakeDamage(0.1f, Categories.DAMAGE_TYPE.DROWNING);
+                wasDrowning = true;
+            }
+            else if(wasDrowning)
+            {
+                drowningRef.stop(STOP_MODE.ALLOWFADEOUT);
+                wasDrowning = false;
             }
         }
 
@@ -332,6 +362,8 @@ public class PlayerCharacterController : MonoBehaviour
 
         previousYSpeed = m_CharacterController.velocity.y;
         m_PreviouslyGrounded = isTouchingGround;
+
+        wasSwimming = isSwimming;
     }
     
 
@@ -447,8 +479,11 @@ public class PlayerCharacterController : MonoBehaviour
             fallWithDamageRef.setParameterByName("Step Material", this.GetComponent<AmbienceBehavior>().ConvertRegionToInt());
             fallWithDamageRef.start();
         }
-        /*fallWithDamageRef.setParameterByName("Step Material", this.GetComponent<AmbienceBehavior>().ConvertRegionToInt());
-        fallWithoutDamageRef.start();*/
+        else if (fallTimer > .1f)
+        {
+            fallWithoutDamageRef.setParameterByName("Step Material", this.GetComponent<AmbienceBehavior>().ConvertRegionToInt());
+            fallWithoutDamageRef.start();
+        }
         Rigidbody body = hit.collider.attachedRigidbody;
 
         // detects if player should be sliding and will create the sliding vector if so.
@@ -488,10 +523,24 @@ public class PlayerCharacterController : MonoBehaviour
         get { return stepRef; }
     }
 
+    public float PlayerStepMaterial
+    {
+        set { stepRef.setParameterByName("Step Material", value); }
+    }
+
+    public float WaterDepth
+    {
+        set { stepRef.setParameterByName("Water Depth", value); }
+    }
+
     public void PlayEatSound() { eatRef.start(); }
     public void PlayDrinkSound() { drinkRef.start(); }
 
     public void PlayAttackedSound() { attackedRef.start(); }
 
     public void PlayCollectPlantSound() { collectPlantRef.start(); }
+
+    public void PlayHungerDialog() { hungerRef.start(); }
+
+    public void PlayThirstDialog() { thirstRef.start(); }
 }

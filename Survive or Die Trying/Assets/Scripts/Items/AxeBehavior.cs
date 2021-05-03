@@ -1,14 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using FMOD.Studio;
 
 // Will make this show up in the asset context menu so people can quickly make more instances.
 [CreateAssetMenu(fileName = "Axe", menuName = "Inventory/Tool/Axe")]
 public class AxeBehavior : ToolItem
 {
+    [FMODUnity.EventRef]
+    public string axeSwingPath;
+
+
+    private EventInstance axeSwingRef;
+
+
 
     public override void InWorldUse(GameObject user)
     {
+
+        axeSwingRef = FMODUnity.RuntimeManager.CreateInstance(axeSwingPath);
         base.InWorldUse(user);
         RaycastHit hit;
         TreeBehavior treeHit;
@@ -17,7 +27,9 @@ public class AxeBehavior : ToolItem
             Debug.Log(hit.collider.name);
             if (hit.transform.TryGetComponent(out treeHit))
             {
-                if(treeHit.ChopsToCut <= 0)
+                axeSwingRef.setParameterByName("Target", 1);
+                axeSwingRef.start();
+                if (treeHit.ChopsToCut <= 0)
                 {
                     treeHit.ChopDown(user);
                 }
@@ -26,6 +38,16 @@ public class AxeBehavior : ToolItem
                     treeHit.Chop();
                 }
             }
+            else
+            {
+                axeSwingRef.setParameterByName("Target", 2);
+                axeSwingRef.start();
+            }
+        }
+        else
+        {
+            axeSwingRef.setParameterByName("Target", 0);
+            axeSwingRef.start();
         }
     }
 }

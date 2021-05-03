@@ -1,9 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using FMOD.Studio;
 
 public class TreeBehavior : MonoBehaviour
 {
+    [FMODUnity.EventRef]
+    public string treeFallPath;
+
+    private EventInstance treeFallRef;
+
 
     private int chopsToCut;     //Variable to hold the amount of chops it takes to cut the tree down
 
@@ -13,7 +19,10 @@ public class TreeBehavior : MonoBehaviour
     void Start()
     {
         //Setting the amount of chops it takes to a random number between 4 and 7
-        chopsToCut = Random.Range(4, 7);    
+        chopsToCut = Random.Range(4, 7);
+
+        treeFallRef = FMODUnity.RuntimeManager.CreateInstance(treeFallPath);
+        FMODUnity.RuntimeManager.AttachInstanceToGameObject(treeFallRef, GetComponent<Transform>(), GetComponent<Rigidbody>());
     }
 
     // Update is called once per frame
@@ -39,7 +48,7 @@ public class TreeBehavior : MonoBehaviour
         treeBody.isKinematic = false;
         treeBody.useGravity = true;*/
 
-
+        treeFallRef.start();
         int logsToDrop = (int)((this.gameObject.transform.GetChild(0).GetComponent<Renderer>().bounds.max.y - this.gameObject.transform.GetChild(0).GetComponent<Renderer>().bounds.min.y) / 5);
 
         for (int i = 0; i < logsToDrop; i++)

@@ -92,11 +92,17 @@
 	</object>
 	<object class="MixerBusPanner" id="{2edda7f1-a4f7-46de-a845-6f56aaa5b8ba}" />
 	<object class="SingleSound" id="{12fa3d0c-723c-492a-b56b-24ad8db8a747}">
+		<property name="isAsync">
+			<value>true</value>
+		</property>
 		<property name="length">
 			<value>6.8039682539682538</value>
 		</property>
 		<property name="delayType">
 			<value>0</value>
+		</property>
+		<property name="looping">
+			<value>true</value>
 		</property>
 		<relationship name="modulators">
 			<destination>{eb5ab7e5-9c02-41be-88a0-35c0ae59e3fb}</destination>
@@ -143,6 +149,9 @@
 	<object class="RandomizerModulator" id="{eb5ab7e5-9c02-41be-88a0-35c0ae59e3fb}">
 		<property name="nameOfPropertyBeingModulated">
 			<value>startOffset</value>
+		</property>
+		<property name="amount">
+			<value>100</value>
 		</property>
 	</object>
 	<object class="MixerBusEffectChain" id="{2ba0767d-4446-445d-bbee-91884dc57d32}">

@@ -19,22 +19,22 @@ public class AmbienceBehavior : MonoBehaviour
     private EventInstance forestSnapRef;
     private EventInstance beachSanpRef;
 
-    private EventInstance playerStepRef;
+    private PlayerCharacterController player;
     // Start is called before the first frame update
     void Start()
     {
         forestSnapRef = FMODUnity.RuntimeManager.CreateInstance(forestSnapPath);
         beachSanpRef = FMODUnity.RuntimeManager.CreateInstance(beachSnapPath);
 
-        playerStepRef = this.GetComponent<PlayerCharacterController>().StepRef;
+        player = this.GetComponent<PlayerCharacterController>();
 
     }
 
     // Update is called once per frame
     void Update()
     {
+        player.PlayerStepMaterial = ConvertRegionToInt();
 
-        playerStepRef.setParameterByName("Step Material", ConvertRegionToInt());
 
         switch (currentRegion)
         {
@@ -50,7 +50,7 @@ public class AmbienceBehavior : MonoBehaviour
                 forestSnapRef.start();
                 break;
         }
-
+        
     }
 
     public Region CurrentRegion
@@ -61,6 +61,7 @@ public class AmbienceBehavior : MonoBehaviour
 
     public int ConvertRegionToInt()
     {
+        if (player.inWater) { return 3; }
         switch (currentRegion)
         {
             case Region.Beach:
